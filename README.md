@@ -20,7 +20,10 @@ Usage:
 5. If everything works fine you will be greeted with a welcome screen. You can type "help" in the command line to see a list of all commands.
 
 ----------------------- 
-NOTE: All commands in the "help" command and in the manual will be typed inside quotes. Inside the program, however, the proper usage is to type them without quotes, for example: Correct: help Incorrect: "help" Commands might be case sensitive so be careful about how you input them!
+NOTE: All commands in the "help" command and in the manual will be typed inside quotes. Inside the program, however, the proper usage is to type them without quotes, for example: 
+Correct: help 
+Incorrect: "help" 
+Commands might be case sensitive so be careful about how you input them!
 -----------------------
 
 Description of all commands:
