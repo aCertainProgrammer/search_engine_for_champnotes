@@ -35,14 +35,14 @@ filepointer = fopen("champ_list.txt", "r");
         int champ_counter = 0;
         DIR *directorypointer;
         struct dirent *entry;
-        dir = opendir("/main_notes_folder");
-        if (dir == NULL) 
+        directorypointer = opendir("/main_notes_folder");
+        if (directorypointer == NULL) 
         {
             printf("Cannot open the main_notes_folder directory!\n");
             mainMenu();
         }
 
-        if (dir != NULL)
+        if (directorypointer != NULL)
         {
             while((entry = readdir(directorypointer)) != NULL)
             {
@@ -52,5 +52,11 @@ filepointer = fopen("champ_list.txt", "r");
         
 
     }
+
+}
+
+void mainMenu()
+{
+printf("You are in the main menu\n");
 
 }
