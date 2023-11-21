@@ -11,7 +11,7 @@ Ashe
 Aurelion Sol
 Azir
 Bard
-Bel'Veth
+BelVeth
 Blitzcrank
 Brand
 Braum
@@ -19,7 +19,7 @@ Briar
 Caitlyn
 Camille
 Cassiopeia
-Cho'Gath
+ChoGath
 Corki
 Darius
 Diana
@@ -51,8 +51,8 @@ Jax
 Jayce
 Jhin
 Jinx
-K'Sante
-Kai'Sa
+KSante
+Kaisa
 Kalista
 Karma
 Karthus
@@ -61,10 +61,10 @@ Katarina
 Kayle
 Kayn
 Kennen
-Kha'Zix
+KhaZix
 Kindred
 Kled
-Kog'Maw
+KogMaw
 LeBlanc
 Lee Sin
 Leona
@@ -100,7 +100,7 @@ Qiyana
 Quinn
 Rakan
 Rammus
-Rek'Sai
+RekSai
 Rell
 Renata Glasc
 Renekton
@@ -141,7 +141,7 @@ Urgot
 Varus
 Vayne
 Veigar
-Vel'Koz
+VelKoz
 Vex
 Vi
 Viego
