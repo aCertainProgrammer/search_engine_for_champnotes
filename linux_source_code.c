@@ -9,9 +9,12 @@ void search();
 void helpCommand();
 
 const int CURRENT_CHAMPION_AMOUNT = 166;
+
+const char THE_MAIN_PATH[] = "main_notes_folder/";
+const char THE_NOTES_POSTFIX[] = "_notes/";
 int main(){
 
-printf("Program start successfull\n");
+printf("Program start successful\n");
 printf("Type \"help\" for the command list\n");
 mainMenu();
 
@@ -37,18 +40,18 @@ filepointer = fopen("champ_list.txt", "r");
         printf("Opened the champ_list file successfully...\n");
         char champName[50];
         int champ_counter = 0;
-        DIR *directorypointer;
+        DIR *directorypointerFileSystemCheck;
         struct dirent *entry;
-        directorypointer = opendir("/main_notes_folder");
-        if (directorypointer == NULL) 
+        directorypointerFileSystemCheck = opendir("/main_notes_folder");
+        if (directorypointerFileSystemCheck == NULL) 
         {
             printf("Cannot open the main_notes_folder directory!\n");
             mainMenu();
         }
 
-        if (directorypointer != NULL)
+        if (directorypointerFileSystemCheck != NULL)
         {
-            while((entry = readdir(directorypointer)) != NULL)
+            while((entry = readdir(directorypointerFileSystemCheck)) != NULL)
             {
                 break; //iterating through the directory and files will be added here
             }
@@ -65,22 +68,60 @@ void mainMenu()
     printf("You are in the main menu\n");
     printf("Enter a command:\n");
     scanf("%s", command);
-    if (command == "search")
+    if (strcmp(command, "search") == 0)
+    {
         search();
-    if (command == "check")
+        return;
+    }    
+    else if (strcmp(command, "check") == 0)
+    {
         fileSystemCheck();
-    if (strcmp(command, "help") == 0)
+        return;
+    }
+    else if (strcmp(command, "help") == 0)
+    { 
         helpCommand();
-    printf("Not a known command! Type \"help\" to see the command list!\n");
+        return;
+    }
+    else 
+    {
+        printf("Not a known command! Type \"help\" to see the command list!\n");
+    }
 }
 void search()
 {
+    char champToSearch[90]; 
     printf("Type the name of the champion\n");
+    scanf("%s", champToSearch);
+    char helperSearchPath[300];
+    char trueSearchPath[400];
+    snprintf(helperSearchPath, 300, "%s%s", THE_MAIN_PATH, champToSearch);
+    snprintf(trueSearchPath, 400, "%s%s", helperSearchPath, THE_NOTES_POSTFIX);
+    printf("%s\n", trueSearchPath);
+    DIR *directorypointerSearch;
+    struct dirent *entry;
+    directorypointerSearch = opendir(trueSearchPath);
+        if (directorypointerSearch == NULL) 
+        {
+            printf("Cannot open the directory!\n");
+            mainMenu();
+        }
+
+        if (directorypointerSearch != NULL)
+        {
+            printf("Directory opened successfully\n");
+            while((entry = readdir(directorypointerSearch)) != NULL)
+            {
+                break; //iterating through the directory and files will be added here
+            }
+        }
+    
 }
 
 void helpCommand()
 {
     printf("\"champsearch\" \n");
     printf("\"fullsearch\" \n");
+    printf("\"search\"\n");
     mainMenu();
 }
