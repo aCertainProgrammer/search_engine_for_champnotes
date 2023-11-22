@@ -196,7 +196,7 @@ void enemyFileSearchHandler(const char *enemy_path)
         printf("Exiting program\n");
         return;
     }
-    if(strcmp(toDisplayOrToOpen, "d") == 0)
+    else if(strcmp(toDisplayOrToOpen, "d") == 0)
     {   
         
         enemypointer = fopen(enemy_path, "r");
@@ -213,6 +213,22 @@ void enemyFileSearchHandler(const char *enemy_path)
         search();
         return;
     } 
+    
+    else if (strcmp(toDisplayOrToOpen, "o") == 0)
+    {
+        char fullFilePathToOpen[200];
         
+        snprintf(fullFilePathToOpen, 200, "xdg-open %s", enemy_path);
+
+        int fileOpenStatus = system(fullFilePathToOpen);
+
+        if (fileOpenStatus == -1)
+            perror("Error executing the command!\n");
+        else if (fileOpenStatus != 0)
+        {
+            printf("Command failed with exit status %d\n", fileOpenStatus);
+            return;
+        }
+    }
 
 }
