@@ -29,6 +29,7 @@ Correct: help
 Incorrect: "help" 
 
 Commands might be case sensitive so be careful about how you input them!
+The default way to type is full lowercase so leave capslock alone and you'll be fine.
 
 -----------------------
 
