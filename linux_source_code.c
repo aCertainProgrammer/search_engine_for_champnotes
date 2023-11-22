@@ -7,11 +7,14 @@ void mainMenu();
 void fileSystemCheck();
 void search();
 void helpCommand();
-
+void enemyFileSearchHandler(const char *enemy_path);
 const int CURRENT_CHAMPION_AMOUNT = 166;
 
 const char THE_MAIN_PATH[] = "main_notes_folder/";
 const char THE_NOTES_POSTFIX[] = "_notes/";
+const char THE_TXT_POSTFIX[] = ".txt";
+const char UNDERSCOREVSUNDERSCORE[] = "_vs_";
+
 int main(){
 
 printf("Program start successful\n");
@@ -33,13 +36,17 @@ filepointer = fopen("champ_list.txt", "r");
         printf("If not, run the createChampList command in the main menu.\n");
         printf("If it is in the directory, reopen the program and try again.\n");
         printf("If this fails, submit a ticket on Github, at https://github.com/Rycerzklanu/search_engine_for_champnotes");
+
         mainMenu();
+        return;
     }
     if (filepointer != NULL)
     {
         printf("Opened the champ_list file successfully...\n");
-        char champName[50];
-        int champ_counter = 0;
+        char champToCheck[50];
+        char helperCheckPath[300];
+        char trueCheckPath[400];
+        FILE *champnotespointer; 
         DIR *directorypointerFileSystemCheck;
         struct dirent *entry;
         directorypointerFileSystemCheck = opendir("/main_notes_folder");
@@ -47,18 +54,29 @@ filepointer = fopen("champ_list.txt", "r");
         {
             printf("Cannot open the main_notes_folder directory!\n");
             mainMenu();
+            return;
         }
 
         if (directorypointerFileSystemCheck != NULL)
         {
             while((entry = readdir(directorypointerFileSystemCheck)) != NULL)
             {
-                break; //iterating through the directory and files will be added here
+                fgets(champToCheck, 50, filepointer);
+                snprintf(helperCheckPath, 300, "%s%s", THE_MAIN_PATH, champToCheck);
+                snprintf(trueCheckPath, 400, "%s%s", helperCheckPath, THE_NOTES_POSTFIX);
+                printf("%s\n", trueCheckPath);
+
+
+    
+        
             }
+            mainMenu();
+            return;
         }
         
 
     }
+    
 
 }
 
@@ -86,17 +104,20 @@ void mainMenu()
     else 
     {
         printf("Not a known command! Type \"help\" to see the command list!\n");
+        mainMenu();
+        return;
     }
 }
 void search()
 {
-    char champToSearch[90]; 
+    char champToSearch[20];
+    
     printf("Type the name of the champion\n");
     scanf("%s", champToSearch);
-    char helperSearchPath[300];
-    char trueSearchPath[400];
-    snprintf(helperSearchPath, 300, "%s%s", THE_MAIN_PATH, champToSearch);
-    snprintf(trueSearchPath, 400, "%s%s", helperSearchPath, THE_NOTES_POSTFIX);
+    char helperSearchPath[50];
+    char trueSearchPath[100];
+    snprintf(helperSearchPath, 50, "%s%s", THE_MAIN_PATH, champToSearch);
+    snprintf(trueSearchPath, 100, "%s%s", helperSearchPath, THE_NOTES_POSTFIX);
     printf("%s\n", trueSearchPath);
     DIR *directorypointerSearch;
     struct dirent *entry;
@@ -105,15 +126,28 @@ void search()
         {
             printf("Cannot open the directory!\n");
             mainMenu();
+            return;
         }
 
         if (directorypointerSearch != NULL)
         {
+            
+            char enemyName[50];
+            char helperEnemySearchPath[200];
+            char noPostfixEnemySearchPath[250];
+            char trueEnemySearchPath[300];
             printf("Directory opened successfully\n");
-            while((entry = readdir(directorypointerSearch)) != NULL)
-            {
-                break; //iterating through the directory and files will be added here
-            }
+            printf("Type the name of the enemy champion:\n");
+            scanf("%s", enemyName);
+            snprintf(helperEnemySearchPath, 200, "%s%s%s", trueSearchPath, champToSearch, UNDERSCOREVSUNDERSCORE);
+            snprintf(noPostfixEnemySearchPath, 250, "%s%s", helperEnemySearchPath, enemyName);
+            snprintf(trueEnemySearchPath, 300, "%s%s", noPostfixEnemySearchPath, THE_TXT_POSTFIX);
+            printf("%s\n", trueEnemySearchPath);
+            
+            enemyFileSearchHandler(trueEnemySearchPath);
+            return;
+
+            //file name format : [champname]_vs_[enemychampname].txt            
         }
     
 }
@@ -124,4 +158,32 @@ void helpCommand()
     printf("\"fullsearch\" \n");
     printf("\"search\"\n");
     mainMenu();
+    return;
+}
+
+
+void enemyFileSearchHandler(const char *enemy_path)
+{
+    FILE *enemypointer;
+    
+    char toDisplayOrToOpen[10];
+    char enemyFileReader[10000];
+    printf("Do you want to display the contents or open the file in the default editor [d/o]?\n");
+    scanf("%9s", toDisplayOrToOpen);
+
+    if(strcmp(toDisplayOrToOpen, "d") == 0)
+    {   
+        
+        enemypointer = fopen(enemy_path, "r");
+        if (enemypointer == NULL)
+        {
+            perror("Error opening file");
+            exit(EXIT_FAILURE);
+        }
+        while(fgets(enemyFileReader, 10000, enemypointer))
+        {
+            printf("%s", enemyFileReader);
+        }
+    }
+
 }
