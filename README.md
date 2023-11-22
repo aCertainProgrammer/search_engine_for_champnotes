@@ -37,7 +37,12 @@ The default way to type is full lowercase so leave capslock alone and you'll be 
 Description of all commands:
 
 "help" - displays the names of all commands
+
 "search" - prompts you to input a champion name (lowercase) and something happens then
+
+"quit" - exits the program
+
+
 More will be added here as the program develops.
 
 Lorem ipsum.
