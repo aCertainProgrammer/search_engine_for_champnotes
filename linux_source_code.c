@@ -62,6 +62,12 @@ filepointer = fopen("champ_list.txt", "r");
             while((entry = readdir(directorypointerFileSystemCheck)) != NULL)
             {
                 fgets(champToCheck, 50, filepointer);
+                //the quit function functionality
+                if (strcmp(champToCheck, "quit") == 0)
+                {
+                    printf("Exiting program\n");
+                    return;
+                }
                 snprintf(helperCheckPath, 300, "%s%s", THE_MAIN_PATH, champToCheck);
                 snprintf(trueCheckPath, 400, "%s%s", helperCheckPath, THE_NOTES_POSTFIX);
                 printf("%s\n", trueCheckPath);
@@ -119,6 +125,11 @@ void search()
     
     printf("Type the name of the champion\n");
     scanf("%s", champToSearch);
+    if (strcmp(champToSearch, "quit") == 0)
+    {
+        printf("Exiting program\n");
+        return;
+    }
     char helperSearchPath[50];
     char trueSearchPath[100];
     snprintf(helperSearchPath, 50, "%s%s", THE_MAIN_PATH, champToSearch);
@@ -144,6 +155,11 @@ void search()
             printf("Directory opened successfully\n");
             printf("Type the name of the enemy champion:\n");
             scanf("%s", enemyName);
+            if (strcmp(enemyName, "quit") == 0)
+            {
+                printf("Exiting program\n");
+                return;
+            }
             snprintf(helperEnemySearchPath, 200, "%s%s%s", trueSearchPath, champToSearch, UNDERSCOREVSUNDERSCORE);
             snprintf(noPostfixEnemySearchPath, 250, "%s%s", helperEnemySearchPath, enemyName);
             snprintf(trueEnemySearchPath, 300, "%s%s", noPostfixEnemySearchPath, THE_TXT_POSTFIX);
@@ -175,7 +191,11 @@ void enemyFileSearchHandler(const char *enemy_path)
     char enemyFileReader[10000];
     printf("Do you want to display the contents or open the file in the default editor [d/o]?\n");
     scanf("%9s", toDisplayOrToOpen);
-
+    if (strcmp(toDisplayOrToOpen, "quit") == 0)
+    {
+        printf("Exiting program\n");
+        return;
+    }
     if(strcmp(toDisplayOrToOpen, "d") == 0)
     {   
         
