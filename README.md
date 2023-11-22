@@ -56,7 +56,7 @@ aatrox_vs_tips.txt
 
 could contain the tips for playing Aatrox. You'd access the file by inputting, command by command:
 
-"search" >> "aatrox" >> "tips" >> "o" / "d" (The program adds the "_vs_" part automatically).
+"search" >> "aatrox" >> "tips" >> "o" / "d" (The program adds the "__vs__" part automatically).
 
 That way you only have to worry about the naming convention once, during file creation, and essentially create a convenient command to open external files you want to display/edit.
 
