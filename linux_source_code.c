@@ -68,6 +68,12 @@ filepointer = fopen("champ_list.txt", "r");
                     printf("Exiting program\n");
                     return;
                 }
+ 
+                else if (strcmp(champToCheck, "back") == 0)
+                {
+                    mainMenu();
+                    return;
+                }
                 snprintf(helperCheckPath, 300, "%s%s", THE_MAIN_PATH, champToCheck);
                 snprintf(trueCheckPath, 400, "%s%s", helperCheckPath, THE_NOTES_POSTFIX);
                 printf("%s\n", trueCheckPath);
@@ -128,6 +134,12 @@ void search()
     if (strcmp(champToSearch, "quit") == 0)
     {
         printf("Exiting program\n");
+        return;
+    }
+    
+    if (strcmp(champToSearch, "back") == 0)
+    {
+        mainMenu();
         return;
     }
     char helperSearchPath[50];
@@ -196,6 +208,12 @@ void enemyFileSearchHandler(const char *enemy_path)
         printf("Exiting program\n");
         return;
     }
+    else if (strcmp(toDisplayOrToOpen, "back") == 0)
+    {
+        search();
+        return;
+    }
+
     else if(strcmp(toDisplayOrToOpen, "d") == 0)
     {   
         
@@ -230,5 +248,8 @@ void enemyFileSearchHandler(const char *enemy_path)
             return;
         }
     }
+
+    search();
+    return;
 
 }

@@ -66,7 +66,6 @@ You can look up the debug_notes folder to see how it's done (try searching "debu
 
 "quit" - exits the program
 
+"back" - goes back one step, for example from deciding whether to display or open the file to the start of the search. It's kind of shovely right now, as using "back" when typing enemy name would get you back to the main menu. This will be fixed soon.
 
-More will be added here as the program develops.
-
-Lorem ipsum.
+More will be added here as the program is developed.
