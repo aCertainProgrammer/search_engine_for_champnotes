@@ -5,3 +5,6 @@ Point 3.
 ----------------------------------
         Let's do some formatting!
 ----------------------------------
+
+
+Point 4. I edited this in after opening with the "o" command!

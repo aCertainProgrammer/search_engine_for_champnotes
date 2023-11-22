@@ -60,6 +60,8 @@ could contain the tips for playing Aatrox. You'd access the file by inputting, c
 
 That way you only have to worry about the naming convention once, during file creation, and essentially create a convenient command to open external files you want to display/edit.
 
+You can look up the debug_notes folder to see how it's done (try searching "debug" >> "enemy")
+
 -----------------------
 
 "quit" - exits the program
