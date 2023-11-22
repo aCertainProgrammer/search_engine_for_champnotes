@@ -38,7 +38,29 @@ Description of all commands:
 
 "help" - displays the names of all commands
 
-"search" - prompts you to input a champion name (lowercase) and something happens then
+"search" - prompts you to input a champion name (lowercase)
+
+After you input the name of the champion you will be prompted to input the name of the enemy champion (also lowercase).
+
+Next, if the program locates the file correctly, you will be asked if you want to display the file contents quickly in the terminal, or if you'd rather open the .txt in your default text editor (this depends on your settings, so on Windows it doesn't have to be the "Notepad" app, it could be, say, Notepad++).
+
+Input "d" to display and "o" to open.
+
+Any changes you write and save to the file (after inputting "o") will be saved as if the file was opened by hand.
+
+-----------------------
+
+NOTE: the file paths are NOT hardcoded, so if you follow naming conventions you can add your files to the repository, for example:
+
+aatrox_vs_tips.txt
+
+could contain the tips for playing Aatrox. You'd access the file by inputting, command by command:
+
+"search" >> "aatrox" >> "tips" >> "o" / "d" (The program adds the "_vs_" part automatically).
+
+That way you only have to worry about the naming convention once, during file creation, and essentially create a convenient command to open external files you want to display/edit.
+
+-----------------------
 
 "quit" - exits the program
 
