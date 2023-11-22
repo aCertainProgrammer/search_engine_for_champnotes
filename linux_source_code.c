@@ -101,6 +101,11 @@ void mainMenu()
         helpCommand();
         return;
     }
+    else if (strcmp(command, "quit") == 0)
+    {
+        printf("Exiting program\n");
+        return;
+    }
     else 
     {
         printf("Not a known command! Type \"help\" to see the command list!\n");
@@ -180,10 +185,14 @@ void enemyFileSearchHandler(const char *enemy_path)
             perror("Error opening file");
             exit(EXIT_FAILURE);
         }
-        while(fgets(enemyFileReader, 10000, enemypointer))
+        while(fgets(enemyFileReader, 10000, enemypointer) != NULL)
         {
             printf("%s", enemyFileReader);
         }
-    }
+        printf("Search successful, returning to the search menu\n");
+        search();
+        return;
+    } 
+        
 
 }
