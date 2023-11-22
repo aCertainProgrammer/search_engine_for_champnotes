@@ -1,7 +1,7 @@
 Welcome to the LoL champion search engine manual.
 
 This program is designed to help maintain a note repository for each champion in the game.
-Right now it's completely unusable but this should change soon.
+Right now it's in a beta state. All feedback appreciated.
 
 Installation:
 
