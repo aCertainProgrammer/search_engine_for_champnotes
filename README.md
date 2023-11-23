@@ -14,7 +14,7 @@ This should be enough to make the program run.
 Usage:
 
 1. Open your terminal (Linux) or cmd (Windows)
-2. Navigate to the folder the binaries are in by either cd (Linux) or dir (Windows)
+2. Navigate to the folder the binaries are in by the "cd" command (for example, cd Documents\search_engine_for_champions in Windows (in linux the "/" is used instead of the "\"
 3. Run the proper binary: ./linux_binary (Linux) or windows_binary.exe (Windows)
 4. If this fails, make sure you are in the proper directory/folder as stated by your terminal/cmd
 5. If everything works fine you will be greeted with a welcome screen. You can type "help" in the command line to see a list of all commands.
