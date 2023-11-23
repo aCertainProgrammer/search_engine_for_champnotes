@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <string.h>
+#include <windows.h>
 
 void mainMenu();
 void fileSystemCheck();
@@ -220,7 +221,7 @@ void enemyFileSearchHandler(const char *enemy_path)
         enemypointer = fopen(enemy_path, "r");
         if (enemypointer == NULL)
         {
-            perror("Error opening file");
+            perror("Error opening file\n");
             exit(EXIT_FAILURE);
         }
         while(fgets(enemyFileReader, 10000, enemypointer) != NULL)
@@ -236,18 +237,16 @@ void enemyFileSearchHandler(const char *enemy_path)
     {
         char fullFilePathToOpen[200];
         
-        snprintf(fullFilePathToOpen, 200, "xdg-open %s", enemy_path);
+        
+	HINSTANCE result = ShellExecute(NULL, "open", enemy_path, NULL, NULL, SW_SHOWNORMAL);
 
-        int fileOpenStatus = system(fullFilePathToOpen);
+	if ((intptr_t)result <= 32)
+	{
+		perror("Error opening file \n");
+		exit(EXIT_FAILURE);
+	}
+   }
 
-        if (fileOpenStatus == -1)
-            perror("Error executing the command!\n");
-        else if (fileOpenStatus != 0)
-        {
-            printf("Command failed with exit status %d\n", fileOpenStatus);
-            return;
-        }
-    }
 
     search();
     return;
