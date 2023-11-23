@@ -15,6 +15,19 @@ Usage:
 
 1. Open your terminal (Linux) or cmd (Windows)
 2. Navigate to the folder the binaries are in by the "cd" command (for example, cd Documents\search_engine_for_champions in Windows (in linux the "/" is used instead of the "\"
+
+-----------------------
+
+For example, here's my setup and commands:
+
+The search engine folder containing all the files visible in the repo is placed in the Documents folder. I run Linux.
+
+Therefore, my way of navigating to the proper directory is:
+
+cd Documents/search_engine_for_champs   <<this is the name of my folder
+
+-----------------------
+
 3. Run the proper binary: ./linux_binary (Linux) or windows_binary.exe (Windows)
 4. If this fails, make sure you are in the proper directory/folder as stated by your terminal/cmd
 5. If everything works fine you will be greeted with a welcome screen. You can type "help" in the command line to see a list of all commands.
