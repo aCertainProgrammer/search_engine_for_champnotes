@@ -5,16 +5,10 @@ Right now it's in a beta state. All feedback appreciated.
 
 Installation:
 
-1. Copy the repository's contents
-Currently supported: Linux.
-Support will be added for Windows as soon as possible.
-
-This should be enough to make the program run.
-
-Usage:
-
-1. Open your terminal (Linux) or cmd (Windows)
-2. Navigate to the folder the binaries are in by the "cd" command (for example, cd Documents\search_engine_for_champions in Windows (in linux the "/" is used instead of the "\"
+1. Download the proper ZIP relese
+2. Unpack the files
+3. Open your terminal (Linux) or cmd (Windows)
+4. Navigate to the folder the binaries are in by the "cd" command (for example, cd Documents\search_engine_for_champions in Windows (in linux the "/" is used instead of the "\"
 
 -----------------------
 
@@ -28,10 +22,13 @@ cd Documents/search_engine_for_champs   <<this is the name of my folder
 
 -----------------------
 
-3. Run the proper binary: ./linux_binary (Linux) or windows_binary.exe (Windows)
-4. If this fails, make sure you are in the proper directory/folder as stated by your terminal/cmd
-5. If everything works fine you will be greeted with a welcome screen. You can type "help" in the command line to see a list of all commands.
-
+5. Run the proper binary: ./linux_binary (Linux) or windows_binary.exe (Windows)
+6. If this fails, make sure you are in the proper directory/folder as stated by your terminal/cmd
+7. If everything works fine you will be greeted with a welcome screen. You can type "help" in the command line to see a list of all commands.
+8. Execute the "createrepo" command in order to create all the folders and files. The program will freeze for 20-30 seconds maximum, do not close it, everything will be ok.
+9. You are ready to use the program. The steps for opening it are the same as during installation:
+    a) navigate to the folder containing the program
+    b) execute the binary
 
 ----------------------- 
 
@@ -80,5 +77,7 @@ You can look up the debug_notes folder to see how it's done (try searching "debu
 "quit" - exits the program
 
 "back" - goes back one step, for example from deciding whether to display or open the file to the start of the search. It's kind of shovely right now, as using "back" when typing enemy name would get you back to the main menu. This will be fixed soon.
+
+"createrepo" - attempts to create all folders and [champion]_vs_[enemy].txt files
 
 More will be added here as the program is developed.
