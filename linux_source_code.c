@@ -8,6 +8,7 @@ void fileSystemCheck();
 void search();
 void helpCommand();
 void enemyFileSearchHandler(const char *enemy_path);
+void createRepo();
 const int CURRENT_CHAMPION_AMOUNT = 166;
 
 const char THE_MAIN_PATH[] = "main_notes_folder/";
@@ -118,6 +119,11 @@ void mainMenu()
         printf("Exiting program\n");
         return;
     }
+    else if (strcmp(command, "createrepo") == 0)
+    {
+        createRepo();
+        return;
+    }
     else 
     {
         printf("Not a known command! Type \"help\" to see the command list!\n");
@@ -187,9 +193,10 @@ void search()
 
 void helpCommand()
 {
-    printf("\"champsearch\" \n");
-    printf("\"fullsearch\" \n");
-    printf("\"search\"\n");
+    printf("\"createrepo\" \n");
+    printf("\"search\" \n");
+    printf("\"back\"\n");
+    printf("\"quit\"\n");
     mainMenu();
     return;
 }
@@ -252,4 +259,20 @@ void enemyFileSearchHandler(const char *enemy_path)
     search();
     return;
 
+}
+
+void createRepo()
+{
+    print("Creating the repository, do not close the program\n");
+    int status = system("scripts/createRepo.sh");
+    if (status == -1)
+    {
+        perror("Error creating the repo\n");
+    }
+    else if (status != 0)
+    {
+        printf("Command failed with exit status %d\n", status);
+    }
+    mainMenu();
+    return;
 }
