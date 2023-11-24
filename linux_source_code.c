@@ -263,7 +263,7 @@ void enemyFileSearchHandler(const char *enemy_path)
 
 void createRepo()
 {
-    print("Creating the repository, do not close the program\n");
+    printf("Creating the repository, do not close the program\n");
     int status = system("scripts/createRepo.sh");
     if (status == -1)
     {
