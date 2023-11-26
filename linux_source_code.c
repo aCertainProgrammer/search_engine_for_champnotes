@@ -4,12 +4,14 @@
 #include <string.h>
 
 void mainMenu();
-void fileSystemCheck();
+void fileDisplay(const char* PathToDisplay);
 void search();
 void helpCommand();
 void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch);
 void createRepo();
 void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch);
+void draftSearch();
+
 
 const int CURRENT_CHAMPION_AMOUNT = 166;
 const char THE_MAIN_PATH[] = "main_notes_folder/";
@@ -17,6 +19,8 @@ const char THE_NOTES_POSTFIX[] = "_notes/";
 const char THE_TXT_POSTFIX[] = ".txt";
 const char UNDERSCOREVSUNDERSCORE[] = "_vs_";
 const char YT_SEARCH_QUERY[] = "https://www.youtube.com/results?search_query=";
+const char THE_DRAFT_PATH[] = "draft_notes_folder/";
+const char THE_DRAFT_POSTFIX[] = "_draft_notes_";
 
 int main(){
 
@@ -52,6 +56,11 @@ void mainMenu()
     else if (strcmp(command, "createrepo") == 0)
     {
         createRepo();
+        return;
+    }
+    else if (strcmp(command, "draft") == 0)
+    {
+        draftSearch();
         return;
     }
     else 
@@ -158,11 +167,10 @@ void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
 
 void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch)
 {
-    FILE *enemypointer;
+   
     
     char toDisplayOrToOpen[10];
-    char enemyFileReader[10000];
-    printf("Do you want to display the contents, open the file, or search a VOD on Youtube? [d/o/s]? ");
+    printf("Do you want to display the contents, open the file, or search a VOD on Youtube? [d/o/s]?: ");
     scanf("%9s", toDisplayOrToOpen);
     if (strcmp(toDisplayOrToOpen, "quit") == 0)
     {
@@ -177,20 +185,9 @@ void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch
 
     else if(strcmp(toDisplayOrToOpen, "d") == 0)
     {   
-        
-        enemypointer = fopen(enemy_path, "r");
-        if (enemypointer == NULL)
-        {
-            perror("\nError opening file");
-            exit(EXIT_FAILURE);
-        }
-        while(fgets(enemyFileReader, 10000, enemypointer) != NULL)
-        {
-            printf("%s", enemyFileReader);
-        }
-        printf("\nSearch successful, returning to the search menu\n");
+        fileDisplay(enemy_path);
         search();
-        return;
+        return;        
     } 
     
     else if (strcmp(toDisplayOrToOpen, "o") == 0)
@@ -229,4 +226,46 @@ void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch
     search();
     return;
 
+}
+
+void draftSearch()
+{
+   printf("\nType the name of a champion you want to look up draft notes for: ");
+    
+    char championToDraft[50];
+    char fullDraftPath[100];
+    char draftMode[10];
+    scanf("%s", championToDraft);
+    printf("\nDo you want to seach for ally or enemy draft notes? [a/e]: ");
+    scanf("%s", draftMode);
+    printf("\n");
+
+        //path template: draft_notes_folder/[champion]_draft_notes_[side].txt
+        if (strcmp(draftMode, "a") == 0)
+        {
+            snprintf(fullDraftPath, 100, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "ally", THE_TXT_POSTFIX);
+            printf("%s\n\n", fullDraftPath);
+            fileDisplay(fullDraftPath);
+            draftSearch();
+            return;
+        }
+
+}
+
+void fileDisplay(const char* PathToDisplay)
+{
+    FILE *readerPointer;
+    char fileReader[10000];
+    readerPointer = fopen(PathToDisplay, "r");
+    if (readerPointer == NULL)
+        {
+            perror("\nError opening file");
+            return;
+        }
+    while(fgets(fileReader, 10000, readerPointer) != NULL)
+        {
+            printf("%s", fileReader);
+        }
+    
+      return;
 }
