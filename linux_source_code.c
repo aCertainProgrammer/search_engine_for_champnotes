@@ -9,8 +9,9 @@ void search();
 void helpCommand();
 void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch);
 void createRepo();
-const int CURRENT_CHAMPION_AMOUNT = 166;
+void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch);
 
+const int CURRENT_CHAMPION_AMOUNT = 166;
 const char THE_MAIN_PATH[] = "main_notes_folder/";
 const char THE_NOTES_POSTFIX[] = "_notes/";
 const char THE_TXT_POSTFIX[] = ".txt";
@@ -60,11 +61,22 @@ void mainMenu()
         return;
     }
 }
+
+void helpCommand()
+{
+    printf("\"createrepo\" \n");
+    printf("\"search\" \n");
+    printf("\"back\"\n");
+    printf("\"quit\"\n");
+    mainMenu();
+    return;
+}
+
 void search()
 {
     char champToSearch[20];
     
-    printf("Type the name of the champion: ");
+    printf("\nType the name of the champion: ");
     scanf("%s", champToSearch);
     if (strcmp(champToSearch, "quit") == 0)
     {
@@ -95,41 +107,54 @@ void search()
 
         if (directorypointerSearch != NULL)
         {
-            
-            char enemyName[50];
-            char helperEnemySearchPath[200];
-            char noPostfixEnemySearchPath[250];
-            char trueEnemySearchPath[300];
-            printf("\nType the name of the enemy champion: ");
-            scanf("%s", enemyName);
-            if (strcmp(enemyName, "quit") == 0)
-            {
-                printf("\nExiting program\n");
-                return;
-            }
-            snprintf(helperEnemySearchPath, 200, "%s%s%s", trueSearchPath, champToSearch, UNDERSCOREVSUNDERSCORE);
-            snprintf(noPostfixEnemySearchPath, 250, "%s%s", helperEnemySearchPath, enemyName);
-            snprintf(trueEnemySearchPath, 300, "%s%s", noPostfixEnemySearchPath, THE_TXT_POSTFIX);
-            printf("\n%s\n", trueEnemySearchPath);
-            
-            enemyFileSearchHandler(trueEnemySearchPath, champToSearch, enemyName);
+            enemyNotesSearch(trueSearchPath, champToSearch);
             return;
-
-            //file name format : [champname]_vs_[enemychampname].txt            
         }
     
 }
 
-void helpCommand()
+
+void createRepo()
 {
-    printf("\"createrepo\" \n");
-    printf("\"search\" \n");
-    printf("\"back\"\n");
-    printf("\"quit\"\n");
+    printf("\nCreating the repository, do not close the program\n");
+    int status = system("scripts/createRepo.sh");
+    if (status == -1)
+    {
+        perror("\nError creating the repo\n");
+    }
+    else if (status != 0)
+    {
+        printf("\nCommand failed with exit status %d\n", status);
+    }
     mainMenu();
     return;
 }
 
+void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
+{
+            
+    char enemyName[50];
+    char helperEnemySearchPath[200];
+    char noPostfixEnemySearchPath[250];
+    char trueEnemySearchPath[300];
+    printf("\nType the name of the enemy champion: ");
+    scanf("%s", enemyName);
+    if (strcmp(enemyName, "quit") == 0)
+    {
+            printf("\nExiting program\n");
+            return;
+     }
+    
+    snprintf(helperEnemySearchPath, 200, "%s%s%s", trueSearchPath, champToSearch, UNDERSCOREVSUNDERSCORE);
+    snprintf(noPostfixEnemySearchPath, 250, "%s%s", helperEnemySearchPath, enemyName);
+    snprintf(trueEnemySearchPath, 300, "%s%s", noPostfixEnemySearchPath, THE_TXT_POSTFIX);
+    printf("\n%s\n", trueEnemySearchPath);
+            
+    enemyFileSearchHandler(trueEnemySearchPath, champToSearch, enemyName);
+    return;
+
+    //file name format : [champname]_vs_[enemychampname].txt            
+}
 
 void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch)
 {
@@ -204,20 +229,4 @@ void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch
     search();
     return;
 
-}
-
-void createRepo()
-{
-    printf("\nCreating the repository, do not close the program\n");
-    int status = system("scripts/createRepo.sh");
-    if (status == -1)
-    {
-        perror("\nError creating the repo\n");
-    }
-    else if (status != 0)
-    {
-        printf("\nCommand failed with exit status %d\n", status);
-    }
-    mainMenu();
-    return;
 }
