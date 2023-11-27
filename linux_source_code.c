@@ -208,7 +208,7 @@ void fileOpen(const char *enemy_path)
     char fullFilePathToOpen[200];
 
     snprintf(fullFilePathToOpen, 200, "xdg-open %s", enemy_path);
-    printf("%s", fullFilePathToOpen);
+    printf("%s\n", fullFilePathToOpen);
     int fileOpenStatus = system(fullFilePathToOpen);
 
     if (fileOpenStatus == -1)
@@ -246,11 +246,12 @@ void draftSearch()
    printf("\nType the name of a champion you want to look up draft notes for: ");
     
     char championToDraft[50];
+    char helperDraftPathForDisplayingAllNotes[200];
     char fullDraftPath[200];
     char draftModeInput[50];
     char draftDisplayOrOpen[50] ;
     char draftMode[50];
-    
+
     scanf("%s", championToDraft);
     quitCheck(championToDraft);
     
@@ -263,6 +264,34 @@ void draftSearch()
         snprintf(draftMode, 50, "%s", "ally");
     else if (strcmp(draftModeInput, "e") == 0)
         snprintf(draftMode, 50, "%s", "enemy");
+    else if (strcmp(draftModeInput, "all") == 0)
+    {
+        
+        printf("\nDo you want to display the notes or open the file?[d/o]: ");
+        scanf("%s", draftDisplayOrOpen);
+        if(strcmp(draftDisplayOrOpen, "d") == 0)
+        {
+            snprintf(fullDraftPath, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "ally", THE_TXT_POSTFIX);
+            printf("\nDisplaying %s ally notes:\n\n", championToDraft);
+            fileDisplay(fullDraftPath);
+            snprintf(helperDraftPathForDisplayingAllNotes, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "enemy", THE_TXT_POSTFIX);
+            printf("\nDisplaying %s enemy notes:\n\n", championToDraft);
+            fileDisplay(helperDraftPathForDisplayingAllNotes);
+            draftSearch();
+            return;
+        }
+    if(strcmp(draftDisplayOrOpen, "o") == 0)    
+        {
+            snprintf(fullDraftPath, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "ally", THE_TXT_POSTFIX);
+            fileOpen(fullDraftPath);
+            snprintf(helperDraftPathForDisplayingAllNotes, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "enemy", THE_TXT_POSTFIX);
+            fileOpen(helperDraftPathForDisplayingAllNotes);
+            draftSearch();
+            return;
+        }
+        
+    }
+        
     else 
         {
             printf("\nError: incorrect ally/enemy input\n");
