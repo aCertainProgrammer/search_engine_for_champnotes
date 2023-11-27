@@ -4,10 +4,13 @@
 #include <string.h>
 
 void mainMenu();
+void commandInputHandler(char command[100]);
 void fileDisplay(const char* PathToDisplay);
 void search();
 void helpCommand();
-void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch);
+void fileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch);
+void fileOpen(const char *enemy_path);
+void youtubeSearchHandler(const char *championToSearch, const char *enemyToSearch);
 void createRepo();
 void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch);
 void draftSearch();
@@ -37,14 +40,19 @@ void mainMenu()
     char command[100];
     printf("\nYou are in the main menu\n");
     printf("Enter a command: ");
+    return commandInputHandler(command);
+}
+
+void commandInputHandler(char command[100])
+{
     scanf("%s", command);
     if (strcmp(command, "search") == 0)
     {
         search();
         return;
-    }    
+    }
     else if (strcmp(command, "help") == 0)
-    { 
+    {
         helpCommand();
         return;
     }
@@ -63,7 +71,7 @@ void mainMenu()
         draftSearch();
         return;
     }
-    else 
+    else
     {
         printf("\nNot a known command! Type \"help\" to see the command list!\n");
         mainMenu();
@@ -159,13 +167,13 @@ void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
     snprintf(trueEnemySearchPath, 300, "%s%s", noPostfixEnemySearchPath, THE_TXT_POSTFIX);
     printf("\n%s\n", trueEnemySearchPath);
             
-    enemyFileSearchHandler(trueEnemySearchPath, champToSearch, enemyName);
+    fileSearchHandler(trueEnemySearchPath, champToSearch, enemyName);
     return;
 
     //file name format : [champname]_vs_[enemychampname].txt            
 }
 
-void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch)
+void fileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch)
 {
    
     
@@ -186,33 +194,52 @@ void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch
     else if(strcmp(toDisplayOrToOpen, "d") == 0)
     {   
         fileDisplay(enemy_path);
-        search();
-        return;        
     } 
     
     else if (strcmp(toDisplayOrToOpen, "o") == 0)
     {
-        char fullFilePathToOpen[200];
         
-        snprintf(fullFilePathToOpen, 200, "xdg-open %s", enemy_path);
-
-        int fileOpenStatus = system(fullFilePathToOpen);
-
-        if (fileOpenStatus == -1)
-            perror("\nError executing the command!\n");
-        else if (fileOpenStatus != 0)
-        {
-            printf("\nCommand failed with exit status %d\n", fileOpenStatus);
-            return;
-        }
+        fileOpen(enemy_path);
+        
     }
     
     else if(strcmp(toDisplayOrToOpen, "s") == 0)
     {
+        
+        youtubeSearchHandler(championToSearch, enemyToSearch);
+    }
+       
+    search();
+    return;
+}
+
+void fileOpen(const char *enemy_path)
+{
+    
+    char fullFilePathToOpen[200];
+
+    snprintf(fullFilePathToOpen, 200, "xdg-open %s", enemy_path);
+    printf("%s", fullFilePathToOpen);
+    int fileOpenStatus = system(fullFilePathToOpen);
+
+    if (fileOpenStatus == -1)
+        perror("\nError executing the command!\n");
+    else if (fileOpenStatus != 0)
+    {
+        printf("\nCommand failed with exit status %d\n", fileOpenStatus);
+        return;
+    }
+   
+}
+
+void youtubeSearchHandler(const char *championToSearch, const char *enemyToSearch)
+{
+    
+    {
         char youtubeSearchPath[100];
         snprintf(youtubeSearchPath, 100, "%s%s%s%s%s%s", "xdg-open ", YT_SEARCH_QUERY, championToSearch, "+vs+", enemyToSearch, "+challenger+grandmaster");
-         int ytSearchStatus = system(youtubeSearchPath);
-         freopen("/dev/null", "w", stderr); 
+        int ytSearchStatus = system(youtubeSearchPath);
+        freopen("/dev/null", "w", stderr);
 
         if (ytSearchStatus == -1)
             perror("\nError executing the command!\n");
@@ -221,11 +248,8 @@ void enemyFileSearchHandler(const char *enemy_path, const char *championToSearch
             printf("\nCommand failed with exit status %d\n", ytSearchStatus);
             return;
         }
-
     }
-    search();
-    return;
-
+    
 }
 
 void draftSearch()
@@ -246,6 +270,7 @@ void draftSearch()
             snprintf(fullDraftPath, 100, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "ally", THE_TXT_POSTFIX);
             printf("%s\n\n", fullDraftPath);
             fileDisplay(fullDraftPath);
+            fileOpen(fullDraftPath);
             draftSearch();
             return;
         }
