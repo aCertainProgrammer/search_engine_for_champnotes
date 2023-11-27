@@ -255,7 +255,7 @@ void draftSearch()
     scanf("%s", championToDraft);
     quitCheck(championToDraft);
     
-    printf("\nDo you want to seach for ally or enemy draft notes? [a/e]: ");
+    printf("\nDo you want to seach for ally, enemy or all draft notes? [a/e/all]: ");
     scanf("%s", draftModeInput);
     quitCheck(draftModeInput);
 
