@@ -58,7 +58,7 @@ void commandInputHandler(char command[100])
     }
     else if (strcmp(command, "quit") == 0)
     {
-        printf("\nExiting program\n");
+        quitCheck(command);
         return;
     }
     else if (strcmp(command, "createrepo") == 0)
