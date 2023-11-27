@@ -8,7 +8,7 @@ Installation:
 1. Download the proper ZIP relese
 2. Unpack the files
 3. Open your terminal (Linux) or cmd (Windows)
-4. Navigate to the folder the binaries are in by the "cd" command (for example, cd Documents\search_engine_for_champions in Windows (in linux the "/" is used instead of the "\"
+4. Navigate to the folder the binaries are in by the "cd" command (for example, cd C:\Users\rycerzklanu\Documents\search_engine_for_champions in Windows (in linux the "/" is used instead of the "\"). You can also use a relative path.
 
 -----------------------
 
@@ -76,8 +76,10 @@ You can look up the debug_notes folder to see how it's done (try searching "debu
 
 "quit" - exits the program
 
-"back" - goes back one step, for example from deciding whether to display or open the file to the start of the search. It's kind of shovely right now, as using "back" when typing enemy name would get you back to the main menu. This will be fixed soon.
+"back" - goes back one command. Not implemented fully
 
 "createrepo" - attempts to create all folders and [champion]_vs_[enemy].txt files
+
+"draft" - allows you to search draft notes for a champion, in a similar way to the "search" command
 
 More will be added here as the program is developed.

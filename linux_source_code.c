@@ -173,7 +173,7 @@ void fileSearchHandler(const char *enemy_path, const char *championToSearch, con
     printf("Do you want to display the contents, open the file, or search a VOD on Youtube? [d/o/s]?: ");
     scanf("%s", toDisplayOrToOpen);
     quitCheck(toDisplayOrToOpen);
-    
+
     if (strcmp(toDisplayOrToOpen, "back") == 0)
     {
         search();
@@ -295,11 +295,11 @@ void quitCheck(const char* isQuit)
    
 }
 
-void fileDisplay(const char* PathToDisplay)
+void fileDisplay(const char* pathToDisplay)
 {
     FILE *readerPointer;
     char fileReader[10000];
-    readerPointer = fopen(PathToDisplay, "r");
+    readerPointer = fopen(pathToDisplay, "r");
     if (readerPointer == NULL)
         {
             perror("\nError opening file");
