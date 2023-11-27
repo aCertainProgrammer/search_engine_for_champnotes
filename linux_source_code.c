@@ -14,7 +14,7 @@ void youtubeSearchHandler(const char *championToSearch, const char *enemyToSearc
 void createRepo();
 void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch);
 void draftSearch();
-
+void quitCheck(const char *isQuit);
 
 const int CURRENT_CHAMPION_AMOUNT = 166;
 const char THE_MAIN_PATH[] = "main_notes_folder/";
@@ -95,11 +95,7 @@ void search()
     
     printf("\nType the name of the champion: ");
     scanf("%s", champToSearch);
-    if (strcmp(champToSearch, "quit") == 0)
-    {
-        printf("\nExiting program\n");
-        return;
-    }
+    quitCheck(champToSearch);
     
     if (strcmp(champToSearch, "back") == 0)
     {
@@ -156,11 +152,7 @@ void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
     char trueEnemySearchPath[300];
     printf("\nType the name of the enemy champion: ");
     scanf("%s", enemyName);
-    if (strcmp(enemyName, "quit") == 0)
-    {
-            printf("\nExiting program\n");
-            return;
-     }
+    quitCheck(enemyName);
     
     snprintf(helperEnemySearchPath, 200, "%s%s%s", trueSearchPath, champToSearch, UNDERSCOREVSUNDERSCORE);
     snprintf(noPostfixEnemySearchPath, 250, "%s%s", helperEnemySearchPath, enemyName);
@@ -179,13 +171,10 @@ void fileSearchHandler(const char *enemy_path, const char *championToSearch, con
     
     char toDisplayOrToOpen[10];
     printf("Do you want to display the contents, open the file, or search a VOD on Youtube? [d/o/s]?: ");
-    scanf("%9s", toDisplayOrToOpen);
-    if (strcmp(toDisplayOrToOpen, "quit") == 0)
-    {
-        printf("\nExiting program\n");
-        return;
-    }
-    else if (strcmp(toDisplayOrToOpen, "back") == 0)
+    scanf("%s", toDisplayOrToOpen);
+    quitCheck(toDisplayOrToOpen);
+    
+    if (strcmp(toDisplayOrToOpen, "back") == 0)
     {
         search();
         return;
@@ -246,7 +235,7 @@ void youtubeSearchHandler(const char *championToSearch, const char *enemyToSearc
         else if (ytSearchStatus != 0)
         {
             printf("\nCommand failed with exit status %d\n", ytSearchStatus);
-            return;
+            exit(0);
         }
     }
     
@@ -257,24 +246,53 @@ void draftSearch()
    printf("\nType the name of a champion you want to look up draft notes for: ");
     
     char championToDraft[50];
-    char fullDraftPath[100];
-    char draftMode[10];
+    char fullDraftPath[200];
+    char draftModeInput[50];
+    char draftDisplayOrOpen[50] ;
+    char draftMode[50];
+    
     scanf("%s", championToDraft);
+    quitCheck(championToDraft);
+    
     printf("\nDo you want to seach for ally or enemy draft notes? [a/e]: ");
-    scanf("%s", draftMode);
-    printf("\n");
+    scanf("%s", draftModeInput);
+    quitCheck(draftModeInput);
 
-        //path template: draft_notes_folder/[champion]_draft_notes_[side].txt
-        if (strcmp(draftMode, "a") == 0)
+    //path template: draft_notes_folder/[champion]_draft_notes_[side].txt
+    if (strcmp(draftModeInput, "a") == 0)
+        snprintf(draftMode, 50, "%s", "ally");
+    else if (strcmp(draftModeInput, "e") == 0)
+        snprintf(draftMode, 50, "%s", "enemy");
+    else 
         {
-            snprintf(fullDraftPath, 100, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "ally", THE_TXT_POSTFIX);
-            printf("%s\n\n", fullDraftPath);
-            fileDisplay(fullDraftPath);
-            fileOpen(fullDraftPath);
-            draftSearch();
+            printf("\nError: incorrect ally/enemy input\n");
             return;
         }
 
+    snprintf(fullDraftPath, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, draftMode, THE_TXT_POSTFIX);
+    printf("%s\n\n", fullDraftPath);
+    
+    printf("\nDo you want to display the notes or open the file?[d/o]: ");
+    scanf("%s", draftDisplayOrOpen);
+
+    if(strcmp(draftDisplayOrOpen, "d") == 0)
+        fileDisplay(fullDraftPath);
+    if(strcmp(draftDisplayOrOpen, "o") == 0)    
+        fileOpen(fullDraftPath);
+    
+    draftSearch();
+    return;
+}
+
+void quitCheck(const char* isQuit)
+{
+    
+    if (strcmp(isQuit, "quit") == 0)
+    {
+        printf("\nExiting program\n");
+        exit(0);
+    }
+   
 }
 
 void fileDisplay(const char* PathToDisplay)
