@@ -8,7 +8,7 @@ Installation:
 1. Download the proper ZIP relese
 2. Unpack the files
 3. Open your terminal (Linux) or cmd (Windows)
-4. Navigate to the folder the binaries are in by the `cd` command (for example, cd C:\Users\rycerzklanu\Documents\search_engine_for_champions in Windows (in linux the "/" is used instead of the "\"). You can also use a relative path.
+4. Navigate to the folder the binaries are in by the `cd` command (for example, ```cd C:\Users\rycerzklanu\Documents\search_engine_for_champions``` in Windows (in linux the "/" is used instead of the "\"). You can also use a relative path.
 
 -----------------------
 
@@ -18,70 +18,62 @@ The search engine folder containing all the files visible in the repo is placed 
 
 Therefore, my way of navigating to the proper directory is:
 
-cd Documents/search_engine_for_champs   <<this is the name of my folder
+```cd Documents/search_engine_for_champs   <<this is the name of my folder```
 
 -----------------------
 
-5. Run the proper binary: ./linux_binary (Linux) or windows_binary.exe (Windows)
+5. Run the proper binary: ```./linux_binary (Linux)``` or ```windows_binary.exe``` (Windows)
 6. If this fails, make sure you are in the proper directory/folder as stated by your terminal/cmd
-7. If everything works fine you will be greeted with a welcome screen. You can type "help" in the command line to see a list of all commands.
-8. Execute the "createrepo" command in order to create all the folders and files. The program will freeze for 20-30 seconds maximum, do not close it, everything will be ok.
+7. If everything works fine you will be greeted with a welcome screen. You can type `help` in the command line to see a list of all commands.
+8. Execute the `createrepo` command in order to create all the folders and files. The program will freeze for 20-30 seconds maximum, do not close it, everything will be ok.
 9. You are ready to use the program. The steps for opening it are the same as during installation:
     a) navigate to the folder containing the program
     b) execute the binary
 
 ----------------------- 
 
-NOTE: All commands in the "help" command and in the manual will be typed inside quotes. Inside the program, however, the proper usage is to type them without quotes, for example: 
-
-Correct: help 
-
-Incorrect: "help" 
-
 Commands might be case sensitive so be careful about how you input them!
 The default way to type is full lowercase so leave capslock alone and you'll be fine.
 
-NOTE2: You can input multiple commands if you separate them with a spacebar, for example (from the main menu): search aatrox akali d renekton camille s poppy riven o 
+NOTE2: You can input multiple commands if you separate them with a spacebar, for example (from the main menu): ```search aatrox akali d renekton camille s poppy riven o```
 
 -----------------------
 
 
 Description of all commands:
 
-"help" - displays the names of all commands
+`help` - displays the names of all commands
 
-"search" - prompts you to input a champion name (lowercase)
+`search` - prompts you to input a champion name (lowercase)
 
 After you input the name of the champion you will be prompted to input the name of the enemy champion (also lowercase).
 
 Next, if the program locates the file correctly, you will be asked if you want to display the file contents quickly in the terminal, or if you'd rather open the .txt in your default text editor (this depends on your settings, so on Windows it doesn't have to be the "Notepad" app, it could be, say, Notepad++).
 
-Input "d" to display and "o" to open.
+Input `d` to display and `o` to open.
 
-Any changes you write and save to the file (after inputting "o") will be saved as if the file was opened by hand.
+Any changes you write and save to the file (after inputting `o`) will be saved as if the file was opened manually.
 
 -----------------------
 
 NOTE: the file paths are NOT hardcoded, so if you follow naming conventions you can add your files to the repository, for example:
 
-aatrox_vs_tips.txt
+```aatrox_vs_tips.txt```
 
-could contain the tips for playing Aatrox. You'd access the file by inputting, command by command:
+could contain the tips for playing Aatrox. You'd access the file by inputting, command by command or all at once:
 
-"search" >> "aatrox" >> "tips" >> "o" / "d" (The program adds the "__vs__" part automatically).
+```search >> aatrox >> tips >> o / d``` (The program adds the "__vs__" part automatically).
 
 That way you only have to worry about the naming convention once, during file creation, and essentially create a convenient command to open external files you want to display/edit.
 
-You can look up the debug_notes folder to see how it's done (try searching "debug" >> "enemy")
-
 -----------------------
 
-"quit" - exits the program
+`quit` - exits the program
 
-"back" - goes back one command. Not implemented fully
+`back` - goes back one command. Not implemented fully
 
-"createrepo" - attempts to create all folders and [champion]_vs_[enemy].txt files
+`createrepo` - attempts to create all folders and [champion]_vs_[enemy].txt files
 
-"draft" - allows you to search draft notes for a champion, in a similar way to the "search" command
+`draft` - allows you to search draft notes for a champion, in a similar way to the `search` command
 
 More will be added here as the program is developed.
