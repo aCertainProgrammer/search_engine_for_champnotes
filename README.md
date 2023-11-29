@@ -8,8 +8,16 @@ Installation:
 1. Download the proper ZIP relese
 2. Unpack the files
 3. Open your terminal (Linux) or cmd (Windows)
-4. Navigate to the folder the binaries are in by the `cd` command (for example, ```cd C:\Users\rycerzklanu\Documents\search_engine_for_champions``` in Windows (in linux the "/" is used instead of the "\"). You can also use a relative path.
+4. Navigate to the folder the binaries are in by the 
+`cd`
+ command, for example, 
+ 
+ ```cd C:\Users\rycerzklanu\Documents\search_engine_for_champions``` in Windows, or
 
+ ```cd Documents/search_engine_for_champions``` in Linux
+
+ You can also use relative file paths in Windows and absolute paths in Linux. 
+ 
 -----------------------
 
 For example, here's my setup and commands:
@@ -18,7 +26,7 @@ The search engine folder containing all the files visible in the repo is placed 
 
 Therefore, my way of navigating to the proper directory is:
 
-```cd Documents/search_engine_for_champs   <<this is the name of my folder```
+```cd Documents/search_engine_for_champs```
 
 -----------------------
 
