@@ -3,6 +3,8 @@
 #include <dirent.h>
 #include <string.h>
 
+void settingsLoader();
+int findSettingsValue(const char* settingToFind);
 void mainMenu();
 void commandInputHandler(char command[100]);
 void fileDisplay(const char* PathToDisplay);
@@ -25,21 +27,78 @@ const char YT_SEARCH_QUERY[] = "https://www.youtube.com/results?search_query=";
 const char THE_DRAFT_PATH[] = "draft_notes_folder/";
 const char THE_DRAFT_POSTFIX[] = "_draft_notes_";
 
+struct settingsTable
+{
+    int welcomeScreenFlavorText;
+    int mainMenuFlavorText;
+    int draftSearchFlavorText;
+    int championNotesSearchFlavorText;
+    int fileOpenFlavorText;
+    int quitCheckFlavorText; 
+    int draftSearchDisplayFormatting;
+};
+
+struct settingsTable settings;
+
+
 int main(){
 
-printf("Program start successful\n");
-printf("Type \"help\" for the command list\n");
-printf("Make sure you read the manual for a good experience\n");
+settingsLoader();
+if (settings.welcomeScreenFlavorText == 1)
+{
+    printf("Program start successful\n");
+    printf("Type \"help\" for the command list\n");
+    printf("Make sure you read the manual for a good experience\n");
+}
 mainMenu();
 
 return 0;
 }
 
+void settingsLoader()
+{
+    settings.welcomeScreenFlavorText = findSettingsValue("welcomeScreenFlavorText");
+    settings.mainMenuFlavorText = findSettingsValue("mainMenuFlavorText");
+    settings.draftSearchFlavorText = findSettingsValue("draftSearchFlavorText");
+    settings.championNotesSearchFlavorText = findSettingsValue("championNotesSearchFlavorText");
+    settings.fileOpenFlavorText = findSettingsValue("fileOpenFlavorText");
+    settings.quitCheckFlavorText = findSettingsValue("quitCheckFlavorText");
+    settings.quitCheckFlavorText = findSettingsValue("draftSearchDisplayFormatting");
+}
+
+
+int findSettingsValue(const char* settingToFind)
+{
+    FILE *settingsSearchPointer;
+    char settingsFileReader[10000];
+    settingsSearchPointer = fopen("settings.txt", "r");
+    char settingName[100];
+    int settingValue = 1;
+    if (settingsSearchPointer == NULL)
+        {
+            perror("\nError opening file");
+            return -1;
+        }
+    while(fgets(settingsFileReader, 10000, settingsSearchPointer) != NULL)
+        {
+            sscanf(settingsFileReader, "%s = %d", settingName, &settingValue);
+            if (strcmp(settingName, settingToFind) == 0)
+                {
+                    return settingValue;
+                }
+        }
+    
+      return -2;
+}
+
 void mainMenu()
 {
     char command[100];
-    printf("\nYou are in the main menu\n");
-    printf("Enter a command: ");
+    if (settings.mainMenuFlavorText == 1)
+    {
+        printf("\nYou are in the main menu\n");
+        printf("Enter a command: ");
+    }
     return commandInputHandler(command);
 }
 
@@ -92,8 +151,11 @@ void helpCommand()
 void search()
 {
     char champToSearch[20];
-    
-    printf("\nType the name of the champion: ");
+
+    if (settings.championNotesSearchFlavorText == 1)
+    {
+        printf("\nType the name of the champion: ");
+    }
     scanf("%s", champToSearch);
     quitCheck(champToSearch);
     
@@ -107,7 +169,12 @@ void search()
     char trueSearchPath[100];
     snprintf(helperSearchPath, 50, "%s%s", THE_MAIN_PATH, champToSearch);
     snprintf(trueSearchPath, 100, "%s%s", helperSearchPath, THE_NOTES_POSTFIX);
-    printf("%s\n", trueSearchPath);
+    
+    if (settings.championNotesSearchFlavorText == 1)
+    {
+        printf("%s\n", trueSearchPath);
+    }
+    
     DIR *directorypointerSearch;
     struct dirent *entry;
     directorypointerSearch = opendir(trueSearchPath);
@@ -150,15 +217,20 @@ void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
     char helperEnemySearchPath[200];
     char noPostfixEnemySearchPath[250];
     char trueEnemySearchPath[300];
-    printf("\nType the name of the enemy champion: ");
+    if (settings.championNotesSearchFlavorText == 1)
+    {
+        printf("\nType the name of the enemy champion: ");
+    }
     scanf("%s", enemyName);
     quitCheck(enemyName);
     
     snprintf(helperEnemySearchPath, 200, "%s%s%s", trueSearchPath, champToSearch, UNDERSCOREVSUNDERSCORE);
     snprintf(noPostfixEnemySearchPath, 250, "%s%s", helperEnemySearchPath, enemyName);
     snprintf(trueEnemySearchPath, 300, "%s%s", noPostfixEnemySearchPath, THE_TXT_POSTFIX);
-    printf("\n%s\n", trueEnemySearchPath);
-            
+    if (settings.championNotesSearchFlavorText == 1)
+    {
+        printf("\n%s\n", trueEnemySearchPath);
+    }       
     fileSearchHandler(trueEnemySearchPath, champToSearch, enemyName);
     return;
 
@@ -167,10 +239,12 @@ void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
 
 void fileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch)
 {
-   
-    
     char toDisplayOrToOpen[10];
-    printf("Do you want to display the contents, open the file, or search a VOD on Youtube? [d/o/s]?: ");
+    if (settings.championNotesSearchFlavorText == 1)
+    {
+            printf("Do you want to display the contents, open the file, or search a VOD on Youtube? [d/o/s]?: ");
+
+    }
     scanf("%s", toDisplayOrToOpen);
     quitCheck(toDisplayOrToOpen);
 
@@ -208,7 +282,11 @@ void fileOpen(const char *enemy_path)
     char fullFilePathToOpen[200];
 
     snprintf(fullFilePathToOpen, 200, "xdg-open %s", enemy_path);
-    printf("%s\n", fullFilePathToOpen);
+    if (settings.fileOpenFlavorText == 1)
+    {
+        printf("%s\n", fullFilePathToOpen);
+    }
+   
     int fileOpenStatus = system(fullFilePathToOpen);
 
     if (fileOpenStatus == -1)
@@ -243,7 +321,10 @@ void youtubeSearchHandler(const char *championToSearch, const char *enemyToSearc
 
 void draftSearch()
 {
-   printf("\nType the name of a champion you want to look up draft notes for: ");
+    if (settings.draftSearchFlavorText == 1)
+    {
+        printf("\nType the name of a champion you want to look up draft notes for: ");
+    }
     
     char championToDraft[50];
     char helperDraftPathForDisplayingAllNotes[200];
@@ -255,7 +336,11 @@ void draftSearch()
     scanf("%s", championToDraft);
     quitCheck(championToDraft);
     
-    printf("\nDo you want to seach for ally, enemy or all draft notes? [a/e/all]: ");
+    if (settings.draftSearchFlavorText == 1)
+    {
+        printf("\nDo you want to seach for ally, enemy or all draft notes? [a/e/all]: ");
+    }
+    
     scanf("%s", draftModeInput);
     quitCheck(draftModeInput);
 
@@ -266,16 +351,29 @@ void draftSearch()
         snprintf(draftMode, 50, "%s", "enemy");
     else if (strcmp(draftModeInput, "all") == 0)
     {
+        if (settings.draftSearchFlavorText == 1)
+        {
+            printf("\nDo you want to display the notes or open the file?[d/o]: ");
+        }
         
-        printf("\nDo you want to display the notes or open the file?[d/o]: ");
         scanf("%s", draftDisplayOrOpen);
         if(strcmp(draftDisplayOrOpen, "d") == 0)
         {
             snprintf(fullDraftPath, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "ally", THE_TXT_POSTFIX);
-            printf("\nDisplaying %s ally notes:\n\n", championToDraft);
+           
+            if (settings.draftSearchDisplayFormatting == 1)
+            {
+                printf("\nDisplaying %s ally notes:\n\n", championToDraft);
+            }
+
             fileDisplay(fullDraftPath);
             snprintf(helperDraftPathForDisplayingAllNotes, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "enemy", THE_TXT_POSTFIX);
-            printf("\nDisplaying %s enemy notes:\n\n", championToDraft);
+            
+            if (settings.draftSearchDisplayFormatting == 1)
+            {
+                printf("\nDisplaying %s enemy notes:\n\n", championToDraft);
+            }
+            
             fileDisplay(helperDraftPathForDisplayingAllNotes);
             draftSearch();
             return;
@@ -301,7 +399,11 @@ void draftSearch()
     snprintf(fullDraftPath, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, draftMode, THE_TXT_POSTFIX);
     printf("%s\n\n", fullDraftPath);
     
-    printf("\nDo you want to display the notes or open the file?[d/o]: ");
+    if (settings.draftSearchFlavorText == 1)
+    {
+        printf("\nDo you want to display the notes or open the file?[d/o]: ");
+    }
+   
     scanf("%s", draftDisplayOrOpen);
 
     if(strcmp(draftDisplayOrOpen, "d") == 0)
@@ -317,8 +419,10 @@ void quitCheck(const char* isQuit)
 {
     
     if (strcmp(isQuit, "quit") == 0)
-    {
-        printf("\nExiting program\n");
+    {   
+        if (settings.quitCheckFlavorText == 1)
+            printf("\nExiting program\n");
+       
         exit(0);
     }
    
