@@ -63,7 +63,7 @@ void settingsLoader()
     settings.championNotesSearchFlavorText = findSettingsValue("championNotesSearchFlavorText");
     settings.fileOpenFlavorText = findSettingsValue("fileOpenFlavorText");
     settings.quitCheckFlavorText = findSettingsValue("quitCheckFlavorText");
-    settings.quitCheckFlavorText = findSettingsValue("draftSearchDisplayFormatting");
+    settings.draftSearchDisplayFormatting = findSettingsValue("draftSearchDisplayFormatting");
 }
 
 
@@ -335,6 +335,12 @@ void draftSearch()
 
     scanf("%s", championToDraft);
     quitCheck(championToDraft);
+    if (strcmp(championToDraft, "back") == 0)
+    {
+        mainMenu();
+        return;
+    }
+
     
     if (settings.draftSearchFlavorText == 1)
     {
@@ -343,6 +349,12 @@ void draftSearch()
     
     scanf("%s", draftModeInput);
     quitCheck(draftModeInput);
+    if (strcmp(draftModeInput, "back") == 0)
+    {
+        mainMenu();
+        return;
+    }
+
 
     //path template: draft_notes_folder/[champion]_draft_notes_[side].txt
     if (strcmp(draftModeInput, "a") == 0)
@@ -357,6 +369,13 @@ void draftSearch()
         }
         
         scanf("%s", draftDisplayOrOpen);
+        quitCheck(draftDisplayOrOpen);
+        if (strcmp(draftDisplayOrOpen, "back") == 0)
+        {
+            mainMenu();
+            return;
+        }
+
         if(strcmp(draftDisplayOrOpen, "d") == 0)
         {
             snprintf(fullDraftPath, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "ally", THE_TXT_POSTFIX);
@@ -405,6 +424,12 @@ void draftSearch()
     }
    
     scanf("%s", draftDisplayOrOpen);
+    quitCheck(draftDisplayOrOpen);
+    if (strcmp(draftDisplayOrOpen, "back") == 0)
+    {
+        mainMenu();
+        return;
+    }
 
     if(strcmp(draftDisplayOrOpen, "d") == 0)
         fileDisplay(fullDraftPath);
@@ -421,8 +446,10 @@ void quitCheck(const char* isQuit)
     if (strcmp(isQuit, "quit") == 0)
     {   
         if (settings.quitCheckFlavorText == 1)
+        {
             printf("\nExiting program\n");
-       
+        }
+
         exit(0);
     }
    
