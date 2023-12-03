@@ -6,6 +6,7 @@
 void settingsLoader();
 int findSettingsValue(const char* settingToFind);
 void mainMenu();
+char* userStringInput();
 void commandInputHandler(char command[100]);
 void memoryFail();
 void fileDisplay(const char* PathToDisplay);
@@ -107,7 +108,7 @@ void mainMenu()
 
 void commandInputHandler(char command[100])
 {
-    scanf("%s", command);
+    command = userStringInput();
     if (strcmp(command, "search") == 0)
     {
         search();
@@ -165,7 +166,8 @@ void search()
     {
         printf("\nType the name of the champion: ");
     }
-    scanf("%s", champToSearch);
+    
+    champToSearch = userStringInput();
     quitCheck(champToSearch);
     
     if (strcmp(champToSearch, "back") == 0)
@@ -238,7 +240,7 @@ void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
     {
         printf("\nType the name of the enemy champion: ");
     }
-    scanf("%s", enemyName);
+    enemyName = userStringInput();
     quitCheck(enemyName);
     
     snprintf(helperEnemySearchPath, 200, "%s%s%s", trueSearchPath, champToSearch, UNDERSCOREVSUNDERSCORE);
@@ -269,7 +271,7 @@ void fileSearchHandler(const char *enemy_path, const char *championToSearch, con
             printf("Do you want to display the contents, open the file, or search a VOD on Youtube? [d/o/s]?: ");
 
     }
-    scanf("%s", toDisplayOrToOpen);
+    toDisplayOrToOpen = userStringInput();
     quitCheck(toDisplayOrToOpen);
 
     if (strcmp(toDisplayOrToOpen, "back") == 0)
@@ -381,7 +383,7 @@ void draftSearch()
     if (draftDisplayOrOpen == NULL) memoryFail();
     if (draftMode == NULL) memoryFail();
 
-    scanf("%s", championToDraft);
+    championToDraft = userStringInput();
     quitCheck(championToDraft);
     if (strcmp(championToDraft, "back") == 0)
     {
@@ -401,7 +403,7 @@ void draftSearch()
         printf("\nDo you want to seach for ally, enemy or all draft notes? [a/e/all]: ");
     }
     
-    scanf("%s", draftModeInput);
+    draftModeInput = userStringInput();
     quitCheck(draftModeInput);
     if (strcmp(draftModeInput, "back") == 0)
     {
@@ -428,7 +430,7 @@ void draftSearch()
             printf("\nDo you want to display the notes or open the file?[d/o]: ");
         }
         
-        scanf("%s", draftDisplayOrOpen);
+        draftDisplayOrOpen = userStringInput();
         quitCheck(draftDisplayOrOpen);
         if (strcmp(draftDisplayOrOpen, "back") == 0)
         {
@@ -507,7 +509,8 @@ void draftSearch()
         printf("\nDo you want to display the notes or open the file?[d/o]: ");
     }
    
-    scanf("%s", draftDisplayOrOpen);
+    draftDisplayOrOpen = userStringInput();
+
     quitCheck(draftDisplayOrOpen);
     if (strcmp(draftDisplayOrOpen, "back") == 0)
     {
@@ -571,4 +574,16 @@ void fileDisplay(const char* pathToDisplay)
     free(fileReader);
     fclose(readerPointer);
     return;
+}
+
+char* userStringInput()
+{
+    char *inputString = malloc(50 * sizeof(char));
+    if (inputString == NULL)
+    {
+        free(inputString);
+        memoryFail();
+    }
+    scanf("%49s", inputString);
+    return inputString;
 }
