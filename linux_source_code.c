@@ -7,6 +7,7 @@ void settingsLoader();
 int findSettingsValue(const char* settingToFind);
 void mainMenu();
 void commandInputHandler(char command[100]);
+void memoryFail();
 void fileDisplay(const char* PathToDisplay);
 void search();
 void helpCommand();
@@ -138,6 +139,11 @@ void commandInputHandler(char command[100])
     }
 }
 
+void memoryFail()
+{
+    printf("Memory failure!\nAborting\n");
+    exit(EXIT_FAILURE);
+}
 void helpCommand()
 {
     printf("\"createrepo\" \n");
@@ -150,7 +156,8 @@ void helpCommand()
 
 void search()
 {
-    char champToSearch[20];
+    char *champToSearch = malloc(20 * sizeof(char));
+    if (champToSearch == NULL) memoryFail();
 
     if (settings.championNotesSearchFlavorText == 1)
     {
@@ -182,12 +189,14 @@ void search()
         {
             printf("\nCannot open the directory!\n");
             mainMenu();
+            free(champToSearch);
             return;
         }
 
         if (directorypointerSearch != NULL)
         {
             enemyNotesSearch(trueSearchPath, champToSearch);
+            free(champToSearch);
             return;
         }
     
@@ -213,10 +222,16 @@ void createRepo()
 void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
 {
             
-    char enemyName[50];
-    char helperEnemySearchPath[200];
-    char noPostfixEnemySearchPath[250];
-    char trueEnemySearchPath[300];
+    char *enemyName = malloc(50 * sizeof(char));
+    char *helperEnemySearchPath = malloc(200 * sizeof(char));
+    char *noPostfixEnemySearchPath = malloc(250 * sizeof(char));
+    char *trueEnemySearchPath = malloc(300 * sizeof(char));
+    
+    if (enemyName == NULL) memoryFail();
+    if (helperEnemySearchPath == NULL) memoryFail();
+    if (noPostfixEnemySearchPath == NULL) memoryFail();
+    if (trueEnemySearchPath == NULL) memoryFail();
+
     if (settings.championNotesSearchFlavorText == 1)
     {
         printf("\nType the name of the enemy champion: ");
@@ -232,6 +247,11 @@ void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
         printf("\n%s\n", trueEnemySearchPath);
     }       
     fileSearchHandler(trueEnemySearchPath, champToSearch, enemyName);
+    free(enemyName);
+    free(helperEnemySearchPath);
+    free(noPostfixEnemySearchPath);
+    free(trueEnemySearchPath);
+    
     return;
 
     //file name format : [champname]_vs_[enemychampname].txt            
@@ -239,7 +259,9 @@ void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch)
 
 void fileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch)
 {
-    char toDisplayOrToOpen[10];
+    char *toDisplayOrToOpen = malloc(10 * sizeof(char));
+    if (toDisplayOrToOpen == NULL) memoryFail();
+
     if (settings.championNotesSearchFlavorText == 1)
     {
             printf("Do you want to display the contents, open the file, or search a VOD on Youtube? [d/o/s]?: ");
@@ -251,6 +273,7 @@ void fileSearchHandler(const char *enemy_path, const char *championToSearch, con
     if (strcmp(toDisplayOrToOpen, "back") == 0)
     {
         search();
+        free(toDisplayOrToOpen);
         return;
     }
 
@@ -273,13 +296,15 @@ void fileSearchHandler(const char *enemy_path, const char *championToSearch, con
     }
        
     search();
+    free(toDisplayOrToOpen);
     return;
 }
 
 void fileOpen(const char *enemy_path)
 {
     
-    char fullFilePathToOpen[200];
+    char *fullFilePathToOpen = malloc(200 * sizeof(char));
+    if (fullFilePathToOpen == NULL) memoryFail();
 
     snprintf(fullFilePathToOpen, 200, "xdg-open %s", enemy_path);
     if (settings.fileOpenFlavorText == 1)
@@ -290,10 +315,18 @@ void fileOpen(const char *enemy_path)
     int fileOpenStatus = system(fullFilePathToOpen);
 
     if (fileOpenStatus == -1)
-        perror("\nError executing the command!\n");
+        { 
+            perror("\nError executing the command!\n");
+            mainMenu();
+            free(fullFilePathToOpen);
+            return;
+        }
+
+        
     else if (fileOpenStatus != 0)
     {
         printf("\nCommand failed with exit status %d\n", fileOpenStatus);
+        free(fullFilePathToOpen);
         return;
     }
    
@@ -302,8 +335,10 @@ void fileOpen(const char *enemy_path)
 void youtubeSearchHandler(const char *championToSearch, const char *enemyToSearch)
 {
     
-    {
-        char youtubeSearchPath[100];
+
+        char *youtubeSearchPath = malloc(100 * sizeof(char));
+        if (youtubeSearchPath == NULL) memoryFail();
+
         snprintf(youtubeSearchPath, 100, "%s%s%s%s%s%s", "xdg-open ", YT_SEARCH_QUERY, championToSearch, "+vs+", enemyToSearch, "+challenger+grandmaster");
         int ytSearchStatus = system(youtubeSearchPath);
         freopen("/dev/null", "w", stderr);
@@ -313,9 +348,13 @@ void youtubeSearchHandler(const char *championToSearch, const char *enemyToSearc
         else if (ytSearchStatus != 0)
         {
             printf("\nCommand failed with exit status %d\n", ytSearchStatus);
+            free(youtubeSearchPath);
             exit(0);
         }
-    }
+        
+        free(youtubeSearchPath);
+        return;
+    
     
 }
 
@@ -326,18 +365,31 @@ void draftSearch()
         printf("\nType the name of a champion you want to look up draft notes for: ");
     }
     
-    char championToDraft[50];
-    char helperDraftPathForDisplayingAllNotes[200];
-    char fullDraftPath[200];
-    char draftModeInput[50];
-    char draftDisplayOrOpen[50] ;
-    char draftMode[50];
+    char *championToDraft = malloc(50 * sizeof(char));
+    char *helperDraftPathForDisplayingAllNotes = malloc(200 * sizeof(char));
+    char *fullDraftPath = malloc(200 * sizeof(char));
+    char *draftModeInput = malloc(50 * sizeof(char));
+    char *draftDisplayOrOpen = malloc(50 * sizeof(char));
+    char *draftMode = malloc(50 * sizeof(char));
+    
+    if (championToDraft == NULL) memoryFail();
+    if (helperDraftPathForDisplayingAllNotes == NULL) memoryFail();
+    if (fullDraftPath == NULL) memoryFail();
+    if (draftModeInput == NULL) memoryFail();
+    if (draftDisplayOrOpen == NULL) memoryFail();
+    if (draftMode == NULL) memoryFail();
 
     scanf("%s", championToDraft);
     quitCheck(championToDraft);
     if (strcmp(championToDraft, "back") == 0)
     {
         mainMenu();
+        free(championToDraft);
+        free(helperDraftPathForDisplayingAllNotes);
+        free(fullDraftPath);
+        free(draftModeInput);
+        free(draftDisplayOrOpen);
+        free(draftMode);
         return;
     }
 
@@ -352,6 +404,12 @@ void draftSearch()
     if (strcmp(draftModeInput, "back") == 0)
     {
         mainMenu();
+        free(championToDraft);
+        free(helperDraftPathForDisplayingAllNotes);
+        free(fullDraftPath);
+        free(draftModeInput);
+        free(draftDisplayOrOpen);
+        free(draftMode);
         return;
     }
 
@@ -373,6 +431,12 @@ void draftSearch()
         if (strcmp(draftDisplayOrOpen, "back") == 0)
         {
             mainMenu();
+            free(championToDraft);
+            free(helperDraftPathForDisplayingAllNotes);
+            free(fullDraftPath);
+            free(draftModeInput);
+            free(draftDisplayOrOpen);
+            free(draftMode);
             return;
         }
 
@@ -395,6 +459,12 @@ void draftSearch()
             
             fileDisplay(helperDraftPathForDisplayingAllNotes);
             draftSearch();
+            free(championToDraft);
+            free(helperDraftPathForDisplayingAllNotes);
+            free(fullDraftPath);
+            free(draftModeInput);
+            free(draftDisplayOrOpen);
+            free(draftMode);
             return;
         }
     if(strcmp(draftDisplayOrOpen, "o") == 0)    
@@ -404,6 +474,12 @@ void draftSearch()
             snprintf(helperDraftPathForDisplayingAllNotes, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "enemy", THE_TXT_POSTFIX);
             fileOpen(helperDraftPathForDisplayingAllNotes);
             draftSearch();
+            free(championToDraft);
+            free(helperDraftPathForDisplayingAllNotes);
+            free(fullDraftPath);
+            free(draftModeInput);
+            free(draftDisplayOrOpen);
+            free(draftMode);
             return;
         }
         
@@ -412,6 +488,12 @@ void draftSearch()
     else 
         {
             printf("\nError: incorrect ally/enemy input\n");
+            free(championToDraft);
+            free(helperDraftPathForDisplayingAllNotes);
+            free(fullDraftPath);
+            free(draftModeInput);
+            free(draftDisplayOrOpen);
+            free(draftMode);
             return;
         }
 
@@ -428,6 +510,12 @@ void draftSearch()
     if (strcmp(draftDisplayOrOpen, "back") == 0)
     {
         mainMenu();
+        free(championToDraft);
+        free(helperDraftPathForDisplayingAllNotes);
+        free(fullDraftPath);
+        free(draftModeInput);
+        free(draftDisplayOrOpen);
+        free(draftMode);
         return;
     }
 
@@ -437,6 +525,12 @@ void draftSearch()
         fileOpen(fullDraftPath);
     
     draftSearch();
+    free(championToDraft);
+    free(helperDraftPathForDisplayingAllNotes);
+    free(fullDraftPath);
+    free(draftModeInput);
+    free(draftDisplayOrOpen);
+    free(draftMode);
     return;
 }
 
@@ -458,7 +552,10 @@ void quitCheck(const char* isQuit)
 void fileDisplay(const char* pathToDisplay)
 {
     FILE *readerPointer;
-    char fileReader[10000];
+    
+    char *fileReader = malloc(10000 * sizeof(char));
+    if (fileReader == NULL) memoryFail();
+
     readerPointer = fopen(pathToDisplay, "r");
     if (readerPointer == NULL)
         {
@@ -469,6 +566,6 @@ void fileDisplay(const char* pathToDisplay)
         {
             printf("%s", fileReader);
         }
-    
-      return;
+    free(fileReader);
+    return;
 }
