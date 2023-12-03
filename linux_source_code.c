@@ -7,10 +7,10 @@ void settingsLoader();
 int findSettingsValue(const char* settingToFind);
 void mainMenu();
 char* userStringInput();
-void commandInputHandler(char command[100]);
+void commandInputHandler();
 void memoryFail();
 void fileDisplay(const char* PathToDisplay);
-void search();
+void NotesChampionFolderSearch();
 void helpCommand();
 void fileSearchHandler(const char *enemy_path, const char *championToSearch, const char *enemyToSearch);
 void fileOpen(const char *enemy_path);
@@ -19,6 +19,7 @@ void createRepo();
 void enemyNotesSearch(const char *trueSearchPath, const char *champToSearch);
 void draftSearch();
 void quitCheck(const char *isQuit);
+char* notesSearchPathMaker(const char *firstChampionToSearch);
 
 const int CURRENT_CHAMPION_AMOUNT = 166;
 const char THE_MAIN_PATH[] = "main_notes_folder/";
@@ -97,47 +98,54 @@ int findSettingsValue(const char* settingToFind)
 
 void mainMenu()
 {
-    char command[100];
+    
     if (settings.mainMenuFlavorText == 1)
     {
         printf("\nYou are in the main menu\n");
         printf("Enter a command: ");
     }
-    return commandInputHandler(command);
+    commandInputHandler();
 }
 
-void commandInputHandler(char command[100])
-{
+void commandInputHandler()
+{   
+    char *command = malloc(100 * sizeof(char));
     command = userStringInput();
     if (strcmp(command, "search") == 0)
     {
-        search();
+        NotesChampionFolderSearch();
+        free(command);
         return;
     }
     else if (strcmp(command, "help") == 0)
     {
         helpCommand();
+        free(command);
         return;
     }
     else if (strcmp(command, "quit") == 0)
     {
         quitCheck(command);
+        free(command);
         return;
     }
     else if (strcmp(command, "createrepo") == 0)
     {
         createRepo();
+        free(command);
         return;
     }
     else if (strcmp(command, "draft") == 0)
     {
         draftSearch();
+        free(command);
         return;
     }
     else
     {
         printf("\nNot a known command! Type \"help\" to see the command list!\n");
         mainMenu();
+        free(command);
         return;
     }
 }
@@ -157,7 +165,7 @@ void helpCommand()
     return;
 }
 
-void search()
+void NotesChampionFolderSearch()
 {
     char *champToSearch = malloc(20 * sizeof(char));
     if (champToSearch == NULL) memoryFail();
@@ -173,34 +181,36 @@ void search()
     if (strcmp(champToSearch, "back") == 0)
     {
         mainMenu();
+        free(champToSearch);
         return;
     }
-
-    char helperSearchPath[50];
-    char trueSearchPath[100];
-    snprintf(helperSearchPath, 50, "%s%s", THE_MAIN_PATH, champToSearch);
-    snprintf(trueSearchPath, 100, "%s%s", helperSearchPath, THE_NOTES_POSTFIX);
+    char *InitialChampionNotesSearchPath = malloc(100 * sizeof(char));
+    if (InitialChampionNotesSearchPath == NULL) memoryFail();
+    
+    strcpy(InitialChampionNotesSearchPath, notesSearchPathMaker(champToSearch));
     
     if (settings.championNotesSearchFlavorText == 1)
     {
-        printf("%s\n", trueSearchPath);
+        printf("%s\n", InitialChampionNotesSearchPath);
     }
     
     DIR *directorypointerSearch;
     struct dirent *entry;
-    directorypointerSearch = opendir(trueSearchPath);
+    directorypointerSearch = opendir(InitialChampionNotesSearchPath);
         if (directorypointerSearch == NULL) 
         {
             printf("\nCannot open the directory!\n");
             mainMenu();
             free(champToSearch);
+            free(InitialChampionNotesSearchPath);
             return;
         }
 
         if (directorypointerSearch != NULL)
         {
-            enemyNotesSearch(trueSearchPath, champToSearch);
+            enemyNotesSearch(InitialChampionNotesSearchPath, champToSearch);
             free(champToSearch);
+            free(InitialChampionNotesSearchPath);
             return;
         }
     
@@ -276,7 +286,7 @@ void fileSearchHandler(const char *enemy_path, const char *championToSearch, con
 
     if (strcmp(toDisplayOrToOpen, "back") == 0)
     {
-        search();
+        NotesChampionFolderSearch();
         free(toDisplayOrToOpen);
         return;
     }
@@ -284,12 +294,14 @@ void fileSearchHandler(const char *enemy_path, const char *championToSearch, con
     else if(strcmp(toDisplayOrToOpen, "d") == 0)
     {   
         fileDisplay(enemy_path);
+        free(toDisplayOrToOpen);
     } 
     
     else if (strcmp(toDisplayOrToOpen, "o") == 0)
     {
         
         fileOpen(enemy_path);
+        free(toDisplayOrToOpen);
         
     }
     
@@ -297,10 +309,10 @@ void fileSearchHandler(const char *enemy_path, const char *championToSearch, con
     {
         
         youtubeSearchHandler(championToSearch, enemyToSearch);
+        free(toDisplayOrToOpen);
     }
        
-    search();
-    free(toDisplayOrToOpen);
+    NotesChampionFolderSearch();
     return;
 }
 
@@ -586,4 +598,13 @@ char* userStringInput()
     }
     scanf("%49s", inputString);
     return inputString;
+}
+
+char* notesSearchPathMaker(const char *firstChampionToSearch)
+{
+    char helperSearchPath[50];
+    char *trueSearchPath = malloc(100 * sizeof(char));
+    snprintf(helperSearchPath, 50, "%s%s", THE_MAIN_PATH, firstChampionToSearch);
+    snprintf(trueSearchPath, 100, "%s%s", helperSearchPath, THE_NOTES_POSTFIX);
+    return trueSearchPath;
 }
