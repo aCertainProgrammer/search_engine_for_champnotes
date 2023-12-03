@@ -85,11 +85,13 @@ int findSettingsValue(const char* settingToFind)
             sscanf(settingsFileReader, "%s = %d", settingName, &settingValue);
             if (strcmp(settingName, settingToFind) == 0)
                 {
+                    fclose(settingsSearchPointer);
                     return settingValue;
                 }
         }
     
-      return -2;
+    fclose(settingsSearchPointer);
+    return -2;
 }
 
 void mainMenu()
@@ -567,5 +569,6 @@ void fileDisplay(const char* pathToDisplay)
             printf("%s", fileReader);
         }
     free(fileReader);
+    fclose(readerPointer);
     return;
 }
