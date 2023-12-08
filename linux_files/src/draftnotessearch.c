@@ -1,6 +1,8 @@
 #include "draftnotessearch.h"
-#include "main.h"
 #include "settings.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "constants.h"
 #include "menu.h"
 #include "validation.h"

@@ -1,0 +1,2 @@
+-I
+/home/rycer/Documents/search_engine_for_champnotes/linux_files/include

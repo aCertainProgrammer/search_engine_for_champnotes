@@ -1,7 +1,8 @@
-#include "main.h"
+#include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
+#include <stdio.h>
 #include "settings.h"
-#include "fileoperations.h"
-#include "constants.h"
 
 struct settingsTable settings;
 

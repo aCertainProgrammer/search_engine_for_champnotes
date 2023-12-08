@@ -1,7 +1,7 @@
 #include "inputhandling.h"
-#include "main.h"
 #include "validation.h"
-
+#include <stdlib.h>
+#include <stdio.h>
 void userStringInput(char **inputString)
 {
     

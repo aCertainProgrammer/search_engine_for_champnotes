@@ -1,11 +1,6 @@
 #include "menu.h"
-#include "main.h"
 #include "settings.h"
-#include "fileoperations.h"
-#include "champnotessearch.h"
-#include "draftnotessearch.h"
-#include "constants.h"
-
+#include <stdio.h>
 
 
 int main() {
