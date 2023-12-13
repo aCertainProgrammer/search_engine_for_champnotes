@@ -48,6 +48,10 @@ void commandInputHandler() {
         macroExecute();
         free(command);
         return;  
+    } else if (strcmp(command, "newmacro") == 0){
+        macroCreate();
+        free(command);
+        return;
     } else {
         printf("\nNot a known command! Type \"help\" to see the command list!\n");
         mainMenu();

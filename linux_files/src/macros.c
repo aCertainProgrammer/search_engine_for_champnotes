@@ -2,6 +2,11 @@
 #include "inputhandling.h"
 #include <stdlib.h>
 #include <stdio.h> 
+#include <string.h>
+#include "menu.h"
+#include "constants.h"
+#include "validation.h"
+
 void macroExecute(){
   sqlite3 * db;
  
@@ -21,11 +26,14 @@ void macroExecute(){
     userStringInput(&macro_name);
     sqlite3_bind_text(statement_to_execute, 1, macro_name, -1, SQLITE_STATIC);
 
-    sqlite3_step(statement_to_execute);
-    char * macro_contents = (char *)sqlite3_column_text(statement_to_execute, 0);
-    printf("\n%s\n", macro_contents);
+    db_status = sqlite3_step(statement_to_execute);
+
+      char * macro_contents = (char *)sqlite3_column_text(statement_to_execute, 0);
+      printf("\n%s\n", macro_contents);
   }
   free(macro_name);
+  sqlite3_finalize(statement_to_execute);
+  sqlite3_close(db);
   return;
 }
 
@@ -41,4 +49,58 @@ int dbStatusCheck(int db_status, sqlite3 * db)
   else {
   return 0;
   }
+}
+
+void macroCreate()
+{
+  sqlite3 * db;
+  int db_status = sqlite3_open("macros.db", &db);
+  dbStatusCheck(db_status, db);
+  
+  const char * create_sql_statement = "INSERT INTO Macros (Macro_name, Macro_contents) VALUES (?, ?)";
+  sqlite3_stmt * data_insertion_statement;
+  db_status = sqlite3_prepare(db, create_sql_statement, -1, &data_insertion_statement, 0);
+
+  char * macro_contents_to_add = NULL;
+  char * macro_name_to_add = NULL;
+  if (db_status == SQLITE_OK)
+  {
+    printf("\nNew macro name: ");
+    userStringInput(&macro_name_to_add);
+
+    printf("\nNew macros contents: ");
+    
+    macro_contents_to_add = malloc(MAX_MACRO_LENGHT * sizeof(char));
+    if (macro_contents_to_add == NULL) memoryFail();
+
+    int buffer_cleaner;
+    while((buffer_cleaner = getchar()) != '\n');
+
+    if (fgets(macro_contents_to_add, MAX_MACRO_LENGHT, stdin) != NULL)
+    {
+      size_t current_macro_lenght = strlen(macro_contents_to_add);
+      if(current_macro_lenght > 0 && macro_contents_to_add[current_macro_lenght-1] == '\n')
+      {
+        macro_contents_to_add[current_macro_lenght - 1] = '\0';
+      }
+    }
+
+    sqlite3_bind_text(data_insertion_statement, 1, macro_name_to_add, -1, SQLITE_STATIC);
+    sqlite3_bind_text(data_insertion_statement, 2, macro_contents_to_add, -1, SQLITE_STATIC);
+
+    if ((db_status = sqlite3_step(data_insertion_statement)) == SQLITE_DONE)
+    {
+      printf("\nMacro added\n"); 
+    }
+    else 
+    {
+      fprintf(stderr, "Error inserting :%s\n", sqlite3_errmsg(db)); 
+    }
+  }
+
+  sqlite3_close(db);
+  free(macro_name_to_add);
+  free(macro_contents_to_add);
+  mainMenu();
+  return;
 }

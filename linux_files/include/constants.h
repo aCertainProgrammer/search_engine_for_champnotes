@@ -9,5 +9,5 @@ extern const char UNDERSCOREVSUNDERSCORE[];
 extern const char YT_SEARCH_QUERY[];
 extern const char THE_DRAFT_PATH[];
 extern const char THE_DRAFT_POSTFIX[];
-
+extern const int MAX_MACRO_LENGHT;
 #endif

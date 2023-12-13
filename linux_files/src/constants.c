@@ -8,3 +8,4 @@ const char UNDERSCOREVSUNDERSCORE[] = "_vs_";
 const char YT_SEARCH_QUERY[] = "https://www.youtube.com/results?search_query=";
 const char THE_DRAFT_PATH[] = "draft_notes_folder/";
 const char THE_DRAFT_POSTFIX[] = "_draft_notes_";
+const int MAX_MACRO_LENGHT = 1000;
