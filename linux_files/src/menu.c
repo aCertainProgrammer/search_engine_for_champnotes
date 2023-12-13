@@ -1,13 +1,14 @@
 // menu.c
 #include "menu.h"
+#include "macros.h"
 #include "main.h"
 #include "settings.h"
 #include "fileoperations.h"
-#include "champnotessearch.h"
 #include "draftnotessearch.h"
 #include "constants.h"
 #include "validation.h"
 #include "inputhandling.h"
+#include <stdlib.h>
 
 void mainMenu() {
     if (settings.mainMenuFlavorText == 1) {
@@ -43,6 +44,10 @@ void commandInputHandler() {
         draftSearch();
         free(command);
         return;
+    } else if (strcmp(command, "macro") == 0) {
+        macroExecute();
+        free(command);
+        return;  
     } else {
         printf("\nNot a known command! Type \"help\" to see the command list!\n");
         mainMenu();
