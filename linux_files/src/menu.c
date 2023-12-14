@@ -9,6 +9,7 @@
 #include "validation.h"
 #include "inputhandling.h"
 #include <stdlib.h>
+#include "champnotesfilesearch.h"
 
 void mainMenu() {
     if (settings.mainMenuFlavorText == 1) {
@@ -25,7 +26,7 @@ void commandInputHandler() {
     if (command == NULL) memoryFail();
 
     if (strcmp(command, "search") == 0) {
-        NotesChampionFolderSearch();
+        championNotesSearchInputReceiver();  
         free(command);
         return;
     } else if (strcmp(command, "help") == 0) {
