@@ -1,6 +1,15 @@
+DEPDIR := .deps
+$(shell mkdir -p $(DEPDIR) >/dev/null)
+DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
+
+$(DEPDIR)/%.d: ;
+%.o: $(DEPDIR)/%.d
+
+include $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(SOURCES))))
+
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99
-LDFLAGS = -lm
+LDFLAGS = -lm -lsqlite3
 SRCDIR = src
 OBJDIR = obj
 INCLUDEDIR = include
@@ -24,4 +33,4 @@ $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 clean:
-	rm -rf $(OBJDIR) $(EXECUTABLE)
+	rm -rf $(OBJDIR) $(EXECUTABLE) $(DEPDIR)
