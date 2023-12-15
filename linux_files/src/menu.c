@@ -46,7 +46,7 @@ void commandInputHandler() {
         free(command);
         return;
     } else if (strcmp(command, "macro") == 0) {
-        macroExecute();
+        macroSelect();
         free(command);
         return;  
     } else if (strcmp(command, "newmacro") == 0){

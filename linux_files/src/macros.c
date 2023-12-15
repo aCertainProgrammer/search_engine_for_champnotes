@@ -7,7 +7,7 @@
 #include "constants.h"
 #include "validation.h"
 
-void macroExecute(){
+void macroSelect(){
   sqlite3 * db;
  
   int db_status = sqlite3_open("macros.db", &db);
@@ -103,4 +103,9 @@ void macroCreate()
   free(macro_contents_to_add);
   mainMenu();
   return;
+}
+
+void macroExecute(char * macro_to_execute)
+{
+  
 }
