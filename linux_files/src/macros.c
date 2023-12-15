@@ -1,4 +1,5 @@
 #include "macros.h"
+#include "champnotesfilesearch.h"
 #include "inputhandling.h"
 #include <stdlib.h>
 #include <stdio.h> 
@@ -30,7 +31,11 @@ void macroSelect(){
 
       char * macro_contents = (char *)sqlite3_column_text(statement_to_execute, 0);
       printf("\n%s\n", macro_contents);
+
+      macroExecute(macro_contents);
   }
+
+
   free(macro_name);
   sqlite3_finalize(statement_to_execute);
   sqlite3_close(db);
@@ -107,5 +112,27 @@ void macroCreate()
 
 void macroExecute(char * macro_to_execute)
 {
-  
+  char * macro_elements[100];
+  char * token = strtok(macro_to_execute, " ");
+
+  int j = 0;
+  for (int i = 0; token != NULL; i++) {
+    macro_elements[i] = token;
+    token = strtok(NULL, " ");
+    j++;
+    printf("\nj = %d", j);
+  }
+  for (int i = 0; i < j; i++) {
+    printf("\n%s\n", macro_elements[i]); 
+  } 
+  for (int i = 0; i < j;) {
+    printf("\n\n%s\n", macro_elements[i]);
+    if (strcmp(macro_elements[i], "search") == 0) {
+      championNotesSearch(macro_elements[i+1], macro_elements[i+2], macro_elements[i+3], 1);
+      i = i + 4;
+    }
+    // TO - DO: DRAFT SEARCH INTO ARGUMENTS/PARAMETER STYLE
+  }
+  mainMenu();
+  return;
 }

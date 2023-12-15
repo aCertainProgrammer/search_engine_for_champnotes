@@ -7,6 +7,6 @@ void macroCreate();
 void macroEdit();
 void macroDelete();
 void macroSelect();
-
+void macroExecute(char *macro_to_execute);
 #endif // !MACROS
 

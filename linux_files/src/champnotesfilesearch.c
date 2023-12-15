@@ -10,7 +10,7 @@
 #include "menu.h"
 #include "inputhandling.h"
 
-void championNotesSearch(char * champion_to_search, char * enemy_to_search, char * notes_opening_mode)
+void championNotesSearch(char * champion_to_search, char * enemy_to_search, char * notes_opening_mode, int is_macro)
 { //path template: main_notes_folder/[champion]_notes/[champion]_vs_[enemy].txt 
   
   char * search_path = malloc(sizeof(char) * 200);
@@ -23,19 +23,19 @@ void championNotesSearch(char * champion_to_search, char * enemy_to_search, char
   if (strcmp(notes_opening_mode, "d") == 0) {
     fileDisplay(search_path);
     free(search_path);
-    championNotesSearchInputReceiver();
+    if (is_macro == 0) mainMenu();
     return;
   }
   else if (strcmp(notes_opening_mode, "o") == 0) {
     fileOpen(search_path);
     free(search_path);
-    championNotesSearchInputReceiver();
+    if (is_macro == 0) mainMenu();
     return;
   }
   else if (strcmp(notes_opening_mode, "s") == 0) {
     youtubeSearchHandler(champion_to_search, enemy_to_search);
     free(search_path);
-    championNotesSearchInputReceiver();
+    if (is_macro == 0) mainMenu();
     return;
   }
 }
@@ -80,7 +80,7 @@ void championNotesSearchInputReceiver()
     mainMenu();
     return;
   }
-  championNotesSearch(champion_to_search_input, enemy_to_search_input, notes_opening_mode_input);
+  championNotesSearch(champion_to_search_input, enemy_to_search_input, notes_opening_mode_input, 0);
   free(champion_to_search_input);
   free(enemy_to_search_input);
   free(notes_opening_mode_input);
