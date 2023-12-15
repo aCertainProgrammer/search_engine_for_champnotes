@@ -10,7 +10,7 @@ void memoryFail()
     exit(EXIT_FAILURE);
 }
 
-void quitCheck(const char* isQuit)
+void quitCheck(char* isQuit)
 {
     
     if (strcmp(isQuit, "quit") == 0)
@@ -25,3 +25,10 @@ void quitCheck(const char* isQuit)
    
 }
 
+int backCheck(char * isBack)
+{
+    if (strcmp(isBack, "back") == 0)
+      return 1;
+    else 
+      return 0;
+}

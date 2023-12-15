@@ -3,6 +3,6 @@
 
 void memoryFail();
 
-void quitCheck(const char *isQuit);
-
+void quitCheck(char *isQuit);
+int backCheck(char * isBack);
 #endif
