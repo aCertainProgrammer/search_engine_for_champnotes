@@ -1,152 +1,99 @@
 #include "draftnotessearch.h"
-#include "settings.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "constants.h"
-#include "menu.h"
-#include "validation.h"
 #include "inputhandling.h"
-#include "fileoperations.h"
+#include "menu.h"
+#include "settings.h"
+#include "validation.h"
 
 
-void draftSearch() {
-    if (settings.draftSearchFlavorText == 1) {
-        printf("\nType the name of a champion you want to look up draft notes for: ");
-    }
+void draftSearch(char * champion_to_draft, char * which_notes_to_display, char * draft_mode_input)
+{
+  char * draft_path = malloc(200 * sizeof(char));
+  char * draft_mode = NULL;
 
-    char *championToDraft = NULL;
-    userStringInput(&championToDraft);
+  memoryCheck(draft_path);
 
-    if (championToDraft == NULL) memoryFail();
-    quitCheck(championToDraft);
-
-    if (strcmp(championToDraft, "back") == 0) {
-        mainMenu();
-        free(championToDraft);
-        return;
-    }
-
-    if (settings.draftSearchFlavorText == 1) {
-        printf("\nDo you want to search for ally, enemy, or all draft notes? [a/e/all]: ");
-    }
-
-    char *draftModeInput = NULL;
-    userStringInput(&draftModeInput);
-
-    if (draftModeInput == NULL) memoryFail();
-    quitCheck(draftModeInput);
-
-    if (strcmp(draftModeInput, "back") == 0) {
-        mainMenu();
-        free(championToDraft);
-        free(draftModeInput);
-        return;
-    }
-
-    draftNotesHandler(championToDraft, draftModeInput);
+  draftModeChecker(draft_mode_input, &draft_mode);
+  printf("\n%s\n", draft_mode);
+  
+  free(draft_path);
+  free(draft_mode);
+  mainMenu();
+  return;
 }
 
-void draftNotesHandler(const char *championToDraft, const char *draftModeInput) {
-    char fullDraftPath[200];
-    char helperDraftPathForDisplayingAllNotes[200];
-    char draftMode[50];
+void draftSearchInputReceiver()
+{
+  char * champion_to_draft_input = NULL;
+  char * which_notes_to_display_input = NULL;
+  char * draft_mode_input = NULL;
 
-    // path template: draft_notes_folder/[champion]_draft_notes_[side].txt
-    if (strcmp(draftModeInput, "a") == 0)
-        snprintf(draftMode, 50, "%s", "ally");
-    else if (strcmp(draftModeInput, "e") == 0)
-        snprintf(draftMode, 50, "%s", "enemy");
-    else if (strcmp(draftModeInput, "all") == 0) {
-        if (settings.draftSearchFlavorText == 1) {
-            printf("\nDo you want to display the notes or open the file? [d/o]: ");
-        }
+  if (settings.draftSearchFlavorText == 1) {
+    printf("\nChampion to draft search: ");
+  }
+  
+  userStringInput(&champion_to_draft_input);
+  quitCheck(champion_to_draft_input);
+  if (backCheck(champion_to_draft_input) == 1) {
+    free(champion_to_draft_input);
+    mainMenu();
+    return;
+  }
+ 
+  if (settings.draftSearchFlavorText == 1) {
+    printf("\nAlly, enemy or both draft notes [a/e/b]: "); 
+  }
+  userStringInput(&which_notes_to_display_input);
+  quitCheck(which_notes_to_display_input);
+  if (backCheck(which_notes_to_display_input) == 1) {
+    free(which_notes_to_display_input);
+    free(champion_to_draft_input);
+    mainMenu();
+    return;
+  }
 
-        char *draftDisplayOrOpen = NULL;
-        userStringInput(&draftDisplayOrOpen);
+  if (settings.draftSearchFlavorText == 1) {
+    printf("\nDo you want to display or open the notes [d/o]: ");
+  }
+  userStringInput(&draft_mode_input);
+  quitCheck(draft_mode_input);
+  if (backCheck(draft_mode_input) == 1) {
+    free(draft_mode_input);
+    free(which_notes_to_display_input);
+    free(champion_to_draft_input);
+    mainMenu();
+    return;
+  }
+  draftSearch(champion_to_draft_input, which_notes_to_display_input, draft_mode_input);
+  free(draft_mode_input);
+  free(which_notes_to_display_input);
+  free(champion_to_draft_input);
+  mainMenu();
+  return;
+ 
+}
 
-        if (draftDisplayOrOpen == NULL) memoryFail();
-        quitCheck(draftDisplayOrOpen);
+void draftModeChecker(char * draft_mode_input_to_check, char ** draft_mode_to_change)
+{
+  if (*draft_mode_to_change != NULL) {
+    free(*draft_mode_to_change);
+    *draft_mode_to_change = NULL;
+  }
 
-        if (strcmp(draftDisplayOrOpen, "back") == 0) {
-            mainMenu();
-            free(championToDraft);
-            free(draftModeInput);
-            free(draftDisplayOrOpen);
-            return;
-        }
+  *draft_mode_to_change = malloc(sizeof(char) * 10);
+  memoryCheck(*draft_mode_to_change);
 
-        if (strcmp(draftDisplayOrOpen, "d") == 0) {
-            snprintf(fullDraftPath, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "ally", THE_TXT_POSTFIX);
-            if (settings.draftSearchDisplayFormatting == 1) {
-                printf("\nDisplaying %s ally notes:\n\n", championToDraft);
-            }
+  if (strcmp(draft_mode_input_to_check, "a") == 0) {
+    strcpy(*draft_mode_to_change, "ally"); 
+  }
+  else if (strcmp(draft_mode_input_to_check, "e") == 0) {
+    strcpy(*draft_mode_to_change, "enemy");
+  }
+  else if (strcmp(draft_mode_input_to_check, "b") == 0) {
+    strcpy(*draft_mode_to_change, "both");
+  }
 
-            fileDisplay(fullDraftPath);
-            snprintf(helperDraftPathForDisplayingAllNotes, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft,
-                     THE_DRAFT_POSTFIX, "enemy", THE_TXT_POSTFIX);
-
-            if (settings.draftSearchDisplayFormatting == 1) {
-                printf("\nDisplaying %s enemy notes:\n\n", championToDraft);
-            }
-
-            fileDisplay(helperDraftPathForDisplayingAllNotes);
-            draftSearch();
-            free(championToDraft);
-            free(draftModeInput);
-            free(draftDisplayOrOpen);
-            return;
-        }
-
-        if (strcmp(draftDisplayOrOpen, "o") == 0) {
-            snprintf(fullDraftPath, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, "ally",
-                     THE_TXT_POSTFIX);
-            fileOpen(fullDraftPath);
-            snprintf(helperDraftPathForDisplayingAllNotes, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft,
-                     THE_DRAFT_POSTFIX, "enemy", THE_TXT_POSTFIX);
-            fileOpen(helperDraftPathForDisplayingAllNotes);
-            draftSearch();
-            free(championToDraft);
-            free(draftModeInput);
-            free(draftDisplayOrOpen);
-            return;
-        }
-    } else {
-        printf("\nError: incorrect ally/enemy input\n");
-        free(championToDraft);
-        free(draftModeInput);
-        return;
-    }
-
-    snprintf(fullDraftPath, 200, "%s%s%s%s%s", THE_DRAFT_PATH, championToDraft, THE_DRAFT_POSTFIX, draftMode,
-             THE_TXT_POSTFIX);
-    printf("%s\n\n", fullDraftPath);
-
-    if (settings.draftSearchFlavorText == 1) {
-        printf("\nDo you want to display the notes or open the file? [d/o]: ");
-    }
-
-    char *draftDisplayOrOpen = NULL;
-    userStringInput(&draftDisplayOrOpen);
-
-    if (draftDisplayOrOpen == NULL) memoryFail();
-    quitCheck(draftDisplayOrOpen);
-
-    if (strcmp(draftDisplayOrOpen, "back") == 0) {
-        mainMenu();
-        free(championToDraft);
-        free(draftModeInput);
-        free(draftDisplayOrOpen);
-        return;
-    }
-
-    if (strcmp(draftDisplayOrOpen, "d") == 0)
-        fileDisplay(fullDraftPath);
-    if (strcmp(draftDisplayOrOpen, "o") == 0)
-        fileOpen(fullDraftPath);
-
-    draftSearch();
-    free(championToDraft);
-    free(draftModeInput);
-    free(draftDisplayOrOpen);
+  return;
 }

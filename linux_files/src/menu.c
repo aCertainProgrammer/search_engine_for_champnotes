@@ -42,7 +42,7 @@ void commandInputHandler() {
         free(command);
         return;
     } else if (strcmp(command, "draft") == 0) {
-        draftSearch();
+        draftSearchInputReceiver();
         free(command);
         return;
     } else if (strcmp(command, "macro") == 0) {

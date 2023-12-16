@@ -32,3 +32,13 @@ int backCheck(char * isBack)
     else 
       return 0;
 }
+
+void memoryCheck(void * variable_to_check)
+{
+    if (variable_to_check == NULL) {
+      memoryFail();
+    }
+    else {
+      return;
+    }
+}
