@@ -1,5 +1,6 @@
 #include "macros.h"
 #include "champnotesfilesearch.h"
+#include "draftnotessearch.h"
 #include "inputhandling.h"
 #include <stdlib.h>
 #include <stdio.h> 
@@ -120,18 +121,21 @@ void macroExecute(char * macro_to_execute)
     macro_elements[i] = token;
     token = strtok(NULL, " ");
     j++;
-    printf("\nj = %d", j);
   }
-  for (int i = 0; i < j; i++) {
-    printf("\n%s\n", macro_elements[i]); 
-  } 
-  for (int i = 0; i < j;) {
+  int i = 0;
+  while(i < j) {
     printf("\n\n%s\n", macro_elements[i]);
     if (strcmp(macro_elements[i], "search") == 0) {
       championNotesSearch(macro_elements[i+1], macro_elements[i+2], macro_elements[i+3], 1);
       i = i + 4;
     }
-    // TO - DO: DRAFT SEARCH INTO ARGUMENTS/PARAMETER STYLE
+    else if (strcmp(macro_elements[i], "draft") == 0) {
+      draftSearchManager(macro_elements[i+1], macro_elements[i+2], macro_elements[i+3]);
+      i = i + 4;
+    }
+    else if (strcmp(macro_elements[i], "quit") == 0) {
+      exit(EXIT_SUCCESS);
+    }
   }
   mainMenu();
   return;
