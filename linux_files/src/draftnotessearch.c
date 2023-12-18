@@ -6,20 +6,26 @@
 #include "menu.h"
 #include "settings.h"
 #include "validation.h"
+#include "constants.h"
+#include "fileoperations.h"
 
-
-void draftSearch(char * champion_to_draft, char * which_notes_to_display, char * draft_mode_input)
+void draftSearchManager(char * champion_to_draft, char * which_notes_to_display, char * draft_mode_input)
 {
   char * draft_path = malloc(200 * sizeof(char));
-  char * draft_mode = NULL;
-
   memoryCheck(draft_path);
 
-  draftModeChecker(draft_mode_input, &draft_mode);
-  printf("\n%s\n", draft_mode);
+
   
+  if (strcmp(which_notes_to_display, "e") == 0 || strcmp(which_notes_to_display, "a") == 0) {
+    strcpy(draft_path, draftSearchPathMaker(which_notes_to_display, champion_to_draft));
+    draftFileOpenOrDisplayManager(draft_path, draft_mode_input);
+    printf("\n%s\n",draft_path);
+  }
+  else if (strcmp(draft_mode_input, "b") == 0) {
+    printf("\ngew\n"); 
+  }
+   
   free(draft_path);
-  free(draft_mode);
   mainMenu();
   return;
 }
@@ -66,7 +72,7 @@ void draftSearchInputReceiver()
     mainMenu();
     return;
   }
-  draftSearch(champion_to_draft_input, which_notes_to_display_input, draft_mode_input);
+  draftSearchManager(champion_to_draft_input, which_notes_to_display_input, draft_mode_input);
   free(draft_mode_input);
   free(which_notes_to_display_input);
   free(champion_to_draft_input);
@@ -75,25 +81,52 @@ void draftSearchInputReceiver()
  
 }
 
-void draftModeChecker(char * draft_mode_input_to_check, char ** draft_mode_to_change)
+char * draftWhichNotesChecker(char * which_notes_to_display_input_to_check)
 {
-  if (*draft_mode_to_change != NULL) {
-    free(*draft_mode_to_change);
-    *draft_mode_to_change = NULL;
-  }
+  char * string_to_return = malloc(sizeof(char)* 10);
+  memoryCheck(string_to_return);
 
-  *draft_mode_to_change = malloc(sizeof(char) * 10);
-  memoryCheck(*draft_mode_to_change);
+  if (strcmp(which_notes_to_display_input_to_check, "a") == 0) {
+    strcpy(string_to_return, "ally");
+    return string_to_return;
+  }
+  else if (strcmp(which_notes_to_display_input_to_check, "e") == 0) {
+    strcpy(string_to_return, "enemy");
+    return string_to_return;
+  }
+  else if (strcmp(which_notes_to_display_input_to_check, "b") == 0) {
+    strcpy(string_to_return, "both");
+    return string_to_return;
+  }
+  else {
+    strcpy(string_to_return, "badinput");
+    return string_to_return;
+  }
+}
 
-  if (strcmp(draft_mode_input_to_check, "a") == 0) {
-    strcpy(*draft_mode_to_change, "ally"); 
-  }
-  else if (strcmp(draft_mode_input_to_check, "e") == 0) {
-    strcpy(*draft_mode_to_change, "enemy");
-  }
-  else if (strcmp(draft_mode_input_to_check, "b") == 0) {
-    strcpy(*draft_mode_to_change, "both");
-  }
+char * draftSearchPathMaker(char * which_notes_to_display, char * champion_to_draft){
 
-  return;
+  char * draft_path_to_return = malloc(sizeof(char)* 200);
+  memoryCheck(draft_path_to_return);
+
+  if (strcmp(which_notes_to_display, "a") == 0) {
+    snprintf(draft_path_to_return, 200, "%s%s%s%s%s", THE_DRAFT_PATH, champion_to_draft, THE_DRAFT_POSTFIX, "ally",THE_TXT_POSTFIX); 
+  }
+  else if (strcmp(which_notes_to_display, "e") == 0) {
+    snprintf(draft_path_to_return, 200, "%s%s%s%s%s", THE_DRAFT_PATH, champion_to_draft, THE_DRAFT_POSTFIX, "enemy",THE_TXT_POSTFIX); 
+  }
+  printf("\ndebug path in the maker: %s\n", draft_path_to_return);
+  return draft_path_to_return;
+}
+
+void draftFileOpenOrDisplayManager(char * draft_path_to_manage, char * draft_mode_to_manage){
+
+  if (strcmp(draft_mode_to_manage, "d") == 0) {
+    fileDisplay(draft_path_to_manage);
+    return;
+ } 
+  else if (strcmp(draft_mode_to_manage, "o") == 0) {
+    fileOpen(draft_path_to_manage);
+    return;
+  }
 }
