@@ -22,6 +22,7 @@ void fileDisplay(char *pathToDisplay) {
         return;
     }
 
+    printf("\n");
     while (fgets(fileReader, 10000, readerPointer) != NULL) {
         printf("%s", fileReader);
     }

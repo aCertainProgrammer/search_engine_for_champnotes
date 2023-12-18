@@ -11,21 +11,35 @@
 
 void draftSearchManager(char * champion_to_draft, char * which_notes_to_display, char * draft_mode_input)
 {
-  char * draft_path = malloc(200 * sizeof(char));
-  memoryCheck(draft_path);
-
-
+ 
+  char * enemy_mode = "e";
+  char * ally_mode = "a";
   
   if (strcmp(which_notes_to_display, "e") == 0 || strcmp(which_notes_to_display, "a") == 0) {
+    char * draft_path = malloc(200 * sizeof(char));
+    memoryCheck(draft_path);
     strcpy(draft_path, draftSearchPathMaker(which_notes_to_display, champion_to_draft));
     draftFileOpenOrDisplayManager(draft_path, draft_mode_input);
-    printf("\n%s\n",draft_path);
+    
+    free(draft_path);
   }
-  else if (strcmp(draft_mode_input, "b") == 0) {
-    printf("\ngew\n"); 
+  else if (strcmp(which_notes_to_display, "b") == 0) {
+    char * draft_path = malloc(200 * sizeof(char));
+    memoryCheck(draft_path);
+
+    strcpy(draft_path, draftSearchPathMaker(ally_mode, champion_to_draft));
+    draftFileOpenOrDisplayManager(draft_path, draft_mode_input);
+
+    free(draft_path);
+    draft_path = malloc(200 * sizeof(char));
+    memoryCheck(draft_path);
+    
+    strcpy(draft_path, draftSearchPathMaker(enemy_mode, champion_to_draft));
+    draftFileOpenOrDisplayManager(draft_path, draft_mode_input);
+
+    free(draft_path);
   }
    
-  free(draft_path);
   mainMenu();
   return;
 }
@@ -115,7 +129,6 @@ char * draftSearchPathMaker(char * which_notes_to_display, char * champion_to_dr
   else if (strcmp(which_notes_to_display, "e") == 0) {
     snprintf(draft_path_to_return, 200, "%s%s%s%s%s", THE_DRAFT_PATH, champion_to_draft, THE_DRAFT_POSTFIX, "enemy",THE_TXT_POSTFIX); 
   }
-  printf("\ndebug path in the maker: %s\n", draft_path_to_return);
   return draft_path_to_return;
 }
 
