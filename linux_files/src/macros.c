@@ -8,7 +8,7 @@
 #include "menu.h"
 #include "constants.h"
 #include "validation.h"
-
+#include <sqlite3.h>
 void macroSelect(){
   sqlite3 * db;
  
@@ -124,19 +124,31 @@ void macroExecute(char * macro_to_execute)
   }
   int i = 0;
   while(i < j) {
-    printf("\n\n%s\n", macro_elements[i]);
-    if (strcmp(macro_elements[i], "search") == 0) {
-      championNotesSearch(macro_elements[i+1], macro_elements[i+2], macro_elements[i+3], 1);
+ mainMenu();
+  return;
+}
+
+void macroExecuteIterator(char * token_to_iterate_through, int iterator_variable){
+
+  i = iterator_variable;
+  printf("'\n%d\n", i);
+  printf("\n\n%s\n", macro_elements[i]);
+  if (strcmp(macro_elements[i], "search") == 0) {
+    championNotesSearch(macro_elements[i+1], macro_elements[i+2], macro_elements[i+3], 1);
       i = i + 4;
-    }
+      macroExecuteIterator(token_to_iterate_through, i);
+      }
     else if (strcmp(macro_elements[i], "draft") == 0) {
       draftSearchManager(macro_elements[i+1], macro_elements[i+2], macro_elements[i+3]);
       i = i + 4;
+      macroExecuteIterator(token_to_iterate_through, i);
     }
     else if (strcmp(macro_elements[i], "quit") == 0) {
       exit(EXIT_SUCCESS);
     }
+    else {
+      i++;
+    }
   }
-  mainMenu();
-  return;
-}
+  }
+ 
