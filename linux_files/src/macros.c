@@ -131,9 +131,6 @@ void macroExecute(char * macro_to_execute)
 
 void macroExecuteIterator(char * macro_elements_array[], int iterator_variable, int macro_size_variable){
 
-  printf("\ndebug iterator_variable: %d\n", iterator_variable);
-  printf("debug macro_size: %d\n", macro_size_variable);
-  printf("debug current macro element: %s\n", macro_elements_array[iterator_variable]);
   if (iterator_variable >= macro_size_variable) {
     return;
   }
@@ -173,6 +170,7 @@ void macroExecuteIterator(char * macro_elements_array[], int iterator_variable, 
   
     if (dbStatusCheck(db_status, db) == 0)
   {
+    printf("\nWhich macro to delete?: ");
     userStringInput(&macro_name);
     sqlite3_bind_text(statement_to_execute, 1, macro_name, -1, SQLITE_STATIC);
 

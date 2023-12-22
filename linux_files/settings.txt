@@ -1,15 +1,15 @@
 #Flavor/informational text display options
 #Note: this does not disable error messages
 
-welcomeScreenFlavorText = 0
+welcomeScreenFlavorText = 1
 
-mainMenuFlavorText = 0
+mainMenuFlavorText = 1
 
-draftSearchFlavorText = 0
+draftSearchFlavorText = 1
 
-championNotesSearchFlavorText = 0
+championNotesSearchFlavorText = 1
 
-fileOpenFlavorText = 0
+fileOpenFlavorText = 1
 
-quitCheckFlavorText = 0
+quitCheckFlavorText = 1
 
