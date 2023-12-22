@@ -103,7 +103,7 @@ void macroCreate()
       fprintf(stderr, "Error inserting :%s\n", sqlite3_errmsg(db)); 
     }
   }
-
+  sqlite3_finalize(data_insertion_statement);
   sqlite3_close(db);
   free(macro_name_to_add);
   free(macro_contents_to_add);
@@ -185,3 +185,62 @@ void macroExecuteIterator(char * macro_elements_array[], int iterator_variable, 
   mainMenu();
   return;
 }
+
+void macroUpdate(){
+  sqlite3 * db;
+ 
+  int db_status = sqlite3_open("macros.db", &db);
+  dbStatusCheck(db_status, db);
+
+  const char *update_sql= "UPDATE Macros SET Macro_contents = ? WHERE Macro_name = ?;";
+  dbStatusCheck(db_status, db);
+
+  char * macro_name = NULL;
+  char * macro_contents_to_update = malloc(MAX_MACRO_LENGHT * sizeof(char));
+  if (macro_contents_to_update == NULL) memoryFail();
+
+  
+
+  sqlite3_stmt *statement_to_execute;
+  db_status = sqlite3_prepare_v2(db, update_sql, -1, &statement_to_execute, 0);
+  
+    if (dbStatusCheck(db_status, db) == 0)
+  {
+    printf("\nWhich macro to edit?: ");
+    userStringInput(&macro_name);
+
+    printf("\nEditing macro: %s", macro_name);
+    printf("\nNew macro contents: ");
+    int buffer_cleaner;
+    while((buffer_cleaner = getchar()) != '\n');
+
+    if (fgets(macro_contents_to_update, MAX_MACRO_LENGHT, stdin) != NULL)
+    {
+      size_t current_macro_lenght = strlen(macro_contents_to_update);
+      if(current_macro_lenght > 0 && macro_contents_to_update[current_macro_lenght-1] == '\n')
+      {
+        macro_contents_to_update[current_macro_lenght - 1] = '\0';
+      }
+    }
+    sqlite3_bind_text(statement_to_execute, 1, macro_contents_to_update, -1, SQLITE_STATIC);
+    sqlite3_bind_text(statement_to_execute, 2, macro_name, -1, SQLITE_STATIC);
+
+    db_status = sqlite3_step(statement_to_execute);
+    if (db_status == SQLITE_DONE) {
+      printf("\nMacro updated successfully!\n");
+  }  else {
+      fprintf(stderr, "\nFailed to update macro: %s\n", sqlite3_errmsg(db));
+    }
+  }
+    else {
+  printf("\nSomething went wrong with the update function!\n");
+  }
+
+  free(macro_contents_to_update);
+  free(macro_name);
+  sqlite3_finalize(statement_to_execute);
+  sqlite3_close(db);
+  mainMenu();
+  return;
+}
+
