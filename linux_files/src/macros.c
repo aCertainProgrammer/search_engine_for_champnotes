@@ -157,4 +157,33 @@ void macroExecuteIterator(char * macro_elements_array[], int iterator_variable, 
  
   }
  
+ void macroDelete(){
+  sqlite3 * db;
  
+  int db_status = sqlite3_open("macros.db", &db);
+  dbStatusCheck(db_status, db);
+
+  const char *delete_sql= "DELETE FROM Macros WHERE macro_name = ?";
+  db_status = sqlite3_exec(db, delete_sql, 0, 0, 0); 
+  dbStatusCheck(db_status, db);
+
+  char * macro_name = NULL;
+  sqlite3_stmt *statement_to_execute;
+  db_status = sqlite3_prepare_v2(db, delete_sql, -1, &statement_to_execute, 0);
+  
+    if (dbStatusCheck(db_status, db) == 0)
+  {
+    userStringInput(&macro_name);
+    sqlite3_bind_text(statement_to_execute, 1, macro_name, -1, SQLITE_STATIC);
+
+    db_status = sqlite3_step(statement_to_execute);
+
+  }
+
+
+  free(macro_name);
+  sqlite3_finalize(statement_to_execute);
+  sqlite3_close(db);
+  mainMenu();
+  return;
+}

@@ -49,6 +49,10 @@ void commandInputHandler() {
         macroSelect();
         free(command);
         return;  
+    } else if (strcmp(command, "rmmacro") == 0){
+        macroDelete();
+        free(command);
+        return;
     } else if (strcmp(command, "newmacro") == 0){
         macroCreate();
         free(command);
