@@ -9,7 +9,7 @@
 #include "constants.h"
 #include "fileoperations.h"
 
-void draftSearchManager(char * champion_to_draft, char * which_notes_to_display, char * draft_mode_input)
+void draftSearchManager(char * champion_to_draft, char * which_notes_to_display, char * draft_mode_input, int is_macro)
 {
  
   char * enemy_mode = "e";
@@ -40,7 +40,10 @@ void draftSearchManager(char * champion_to_draft, char * which_notes_to_display,
     free(draft_path);
   }
    
-  mainMenu();
+
+  if (is_macro == 0) {
+    mainMenu();
+  }
   return;
 }
 
@@ -86,7 +89,7 @@ void draftSearchInputReceiver()
     mainMenu();
     return;
   }
-  draftSearchManager(champion_to_draft_input, which_notes_to_display_input, draft_mode_input);
+  draftSearchManager(champion_to_draft_input, which_notes_to_display_input, draft_mode_input, 0);
   free(draft_mode_input);
   free(which_notes_to_display_input);
   free(champion_to_draft_input);

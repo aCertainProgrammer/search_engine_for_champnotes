@@ -1,6 +1,6 @@
 #ifndef INPUTHANDLING_H
 #define INPUTHANDLING_H
 
-void userStringInput();
+void userStringInput(char **inputString);
 
 #endif

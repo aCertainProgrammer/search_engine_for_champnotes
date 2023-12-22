@@ -116,39 +116,45 @@ void macroExecute(char * macro_to_execute)
   char * macro_elements[100];
   char * token = strtok(macro_to_execute, " ");
 
-  int j = 0;
+  int macro_size = 0;
   for (int i = 0; token != NULL; i++) {
     macro_elements[i] = token;
     token = strtok(NULL, " ");
-    j++;
+    macro_size++;
   }
-  int i = 0;
-  while(i < j) {
- mainMenu();
+  int macro_iterator = 0;
+  macroExecuteIterator(macro_elements, macro_iterator, macro_size);
+  mainMenu();
   return;
 }
 
-void macroExecuteIterator(char * token_to_iterate_through, int iterator_variable){
 
-  i = iterator_variable;
-  printf("'\n%d\n", i);
-  printf("\n\n%s\n", macro_elements[i]);
-  if (strcmp(macro_elements[i], "search") == 0) {
-    championNotesSearch(macro_elements[i+1], macro_elements[i+2], macro_elements[i+3], 1);
-      i = i + 4;
-      macroExecuteIterator(token_to_iterate_through, i);
+void macroExecuteIterator(char * macro_elements_array[], int iterator_variable, int macro_size_variable){
+
+  printf("\ndebug iterator_variable: %d\n", iterator_variable);
+  printf("debug macro_size: %d\n", macro_size_variable);
+  printf("debug current macro element: %s\n", macro_elements_array[iterator_variable]);
+  if (iterator_variable >= macro_size_variable) {
+    return;
+  }
+  if (strcmp(macro_elements_array[iterator_variable], "search") == 0) {
+    championNotesSearch(macro_elements_array[iterator_variable+1], macro_elements_array[iterator_variable+2], macro_elements_array[iterator_variable+3], 1);
+      iterator_variable = iterator_variable + 4;
+      macroExecuteIterator(macro_elements_array, iterator_variable, macro_size_variable);
       }
-    else if (strcmp(macro_elements[i], "draft") == 0) {
-      draftSearchManager(macro_elements[i+1], macro_elements[i+2], macro_elements[i+3]);
-      i = i + 4;
-      macroExecuteIterator(token_to_iterate_through, i);
+  else if (strcmp(macro_elements_array[iterator_variable], "draft") == 0) {
+      draftSearchManager(macro_elements_array[iterator_variable+1], macro_elements_array[iterator_variable+2], macro_elements_array[iterator_variable+3], 1);
+      iterator_variable = iterator_variable + 4;
+      macroExecuteIterator(macro_elements_array, iterator_variable, macro_size_variable);
     }
-    else if (strcmp(macro_elements[i], "quit") == 0) {
+  else if (strcmp(macro_elements_array[iterator_variable], "quit") == 0) {
       exit(EXIT_SUCCESS);
     }
-    else {
-      i++;
+  else {
+      iterator_variable++;
     }
+
+ 
   }
-  }
+ 
  
