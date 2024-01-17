@@ -98,8 +98,11 @@ That way you only have to worry about the naming convention once, during file cr
 `draft` - allows you to search draft notes for a champion, in a similar way to the `search` command
 
 `newmacro` - allows you to create a macro  to shorten your commonly used commands, for example: Macro camrenek would mean `search camille renekton s quit`
+
 `rmmacro` - allows you to remove a macro
+
 `upmacro` - allows you to update an existing macro without deleting it
+
 `macro` - allows you to run a pre-saved macro
 
 
